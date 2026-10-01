@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1d4ed8">
+<title>Guía Práctica Admisión Prepa Tec Aaron Romo</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--line:#e5e7eb;--accent:#1d4ed8;--good:#166534;--bad:#b91c1c;--warn:#92400e}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}.wrap{max-width:1050px;margin:auto;padding:20px}.top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}.brand{font-weight:800;font-size:22px}.pill{padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:13px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}.span6{grid-column:span 6}.span12{grid-column:span 12}.span4{grid-column:span 4}h1,h2,h3{margin:0 0 8px}p{line-height:1.45}.muted{color:var(--muted)}button,select,input{font:inherit}select{padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff;min-width:220px}button{border:0;border-radius:12px;padding:11px 15px;cursor:pointer;background:var(--accent);color:#fff;font-weight:700}button.secondary{background:#fff;color:var(--text);border:1px solid var(--line)}button.ghost{background:transparent;color:var(--accent);border:1px solid #bfdbfe}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.stack{display:grid;gap:10px}.hidden{display:none!important}.login{max-width:440px;margin:80px auto}.login input{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;font-size:16px}.choice{display:block;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer}.choice input{margin-right:8px}.choice.sel{border-color:#93c5fd;background:#eff6ff}.feedback{padding:12px;border-radius:12px;border:1px solid var(--line)}.good{background:#f0fdf4;color:var(--good);border-color:#bbf7d0}.bad{background:#fef2f2;color:var(--bad);border-color:#fecaca}.progress{height:9px;background:#e5e7eb;border-radius:999px;overflow:hidden}.progress>div{height:100%;background:var(--accent)}.score{font-size:42px;font-weight:800}.barrow{display:grid;grid-template-columns:minmax(160px,1fr) 80px;gap:10px;align-items:center;margin:8px 0}.smallbar{height:8px;background:#e5e7eb;border-radius:999px;overflow:hidden}.smallbar span{display:block;height:100%;background:var(--accent)}.kpi{font-size:28px;font-weight:800}.note{padding:12px;background:#fffbeb;border:1px solid #fde68a;border-radius:12px;color:var(--warn)}.module{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff}.module strong{display:block}@media(max-width:760px){.span6,.span4{grid-column:span 12}.wrap{padding:12px}.grid{gap:12px}.card{padding:15px}.barrow{grid-template-columns:1fr 60px}}@media print{button,.noprint,#loginView,#dashboard .card:not(#reportCard){display:none!important}body{background:#fff}.wrap{max-width:none}.card{border:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div id="loginView" class="login card"><h1>Guía Práctica Admisión Prepa Tec Aaron Romo</h1><p class="muted">Cambridge English + PIENSE II en un solo lugar. <span class="pill">Versión 2.0</span></p><label><strong>Código de acceso</strong></label><input id="code" autocomplete="off" placeholder="Escribe tu código"><div class="row" style="margin-top:12px"><button id="loginBtn">Entrar</button></div><p id="loginMsg" class="muted"></p></div>
+<div id="app" class="hidden">
+<div class="top"><div><div class="brand">Guía Práctica Admisión Prepa Tec Aaron Romo</div><div id="todayLabel" class="muted"></div></div><div class="row"><span id="priorityPill" class="pill"></span><button class="secondary noprint" id="logoutBtn">Salir</button></div></div>
+<div id="studentDashboard"><div id="dashboard" class="grid">
+<section class="card span12">
+      <h2 id="todayTitle">Recomendación de hoy</h2>
+      <p id="todayPlan"></p>
+      <div class="note" style="margin:12px 0">
+      <strong>¿Qué debes usar?</strong><br>
+      <strong>Práctica guiada:</strong> úsala para aprender y reforzar. Después de cada respuesta te explica qué estuvo bien o mal y por qué.<br><br>
+      <strong>Examen prueba:</strong> úsalo para medirte. No tendrás explicaciones ni ayuda durante el examen; trabajarás con tiempo para medir tu precisión y tu ritmo de respuesta. Al terminar recibirás feedback de tu desempeño.
+    </div>
+      <div class="row"><button id="quickStart">Empezar práctica recomendada</button><button class="secondary" id="openHistory">Ver historial</button></div>
+    </section>
+<section class="card span6"><h2>Cambridge English</h2>
+      <p class="muted">Reading, Language Use, Vocabulary y Listening.</p>
+      <p><strong>Para estudiar:</strong> recibe explicación después de cada respuesta.</p>
+      <div class="row"><button data-action="english-practice">Práctica guiada</button><button class="secondary" data-action="english-sim">Examen prueba · 90 min</button></div>
+    </section>
+<section class="card span6"><h2>PIENSE II</h2>
+      <p class="muted">Habilidad cognoscitiva, Español y Matemáticas en esta versión de entrenamiento.</p>
+      <p><strong>Para estudiar:</strong> trabaja temas y subtemas con explicación inmediata.</p>
+      <div class="row"><button data-action="piense-practice">Práctica guiada</button><button class="secondary" data-action="piense-sim">Examen prueba</button></div>
+    </section>
+
+<section class="card span12" id="datesCard">
+  <div class="top">
+    <div>
+      <h2>📅 Tus fechas importantes</h2>
+      <p class="muted">Tenlas presentes para organizar tu preparación.</p>
+    </div>
+    <span class="pill" id="nextExamCountdown">Próxima fecha</span>
+  </div>
+  <div class="grid" style="margin-top:10px">
+    <div class="module span4">
+      <strong>🇬🇧 Examen de Inglés · 8 de octubre</strong>
+      <span class="muted" id="englishCountdown"></span>
+      <p style="margin-bottom:4px"><strong>3:00–5:00 pm · PrepaTec Valle Alto</strong></p>
+      <p class="muted" style="margin:0">Edificio 1 · Sala Multiusos</p>
+      <p style="margin-bottom:0"><strong>Lleva:</strong> pasaporte, lápiz, borrador, pluma, sacapuntas, laptop, audífonos y el código que está en el correo/celular.</p>
+    </div>
+    <div class="module span4">
+      <strong>📝 Taller de preparación · 19–22 de octubre</strong>
+      <span class="muted" id="workshopCountdown"></span>
+      <p style="margin-bottom:4px"><strong>4:00–7:00 pm · PrepaTec Valle Alto</strong></p>
+      <p class="muted" style="margin:0">Aulas 1 · Salón 101</p>
+      <p style="margin-bottom:0"><strong>Lleva:</strong> pasaporte, lápiz, borrador, pluma y sacapuntas.</p>
+    </div>
+    <div class="module span4">
+      <strong>🎓 Examen de admisión · 24 de octubre</strong>
+      <span class="muted" id="admissionCountdown"></span>
+      <p style="margin-bottom:4px"><strong>7:00 am–12:00 pm · PrepaTec Garza Lagüera</strong></p>
+      <p class="muted" style="margin:0">Edificio 4 · Piso 4 · Centro de Congresos</p>
+      <p style="margin-bottom:0"><strong>Lleva:</strong> pasaporte, lápiz, borrador, pluma y sacapuntas.</p>
+    </div>
+  </div>
+</section>
+<section class="card span12"><h3>Mapa de temas PIENSE II</h3><div class="grid" style="margin-top:10px"><div class="module span4"><strong>Habilidad cognoscitiva</strong><span class="muted">Transformaciones lógicas, relaciones, patrones, matrices y razonamiento.</span></div><div class="module span4"><strong>Español</strong><span class="muted">Lengua, comprensión/análisis de lectura y destrezas de redacción.</span></div><div class="module span4"><strong>Matemáticas</strong><span class="muted">Numeración, álgebra, geometría/medición, estadística y probabilidad.</span></div></div></section>
+<section id="reportCard" class="card span12"><div class="top"><div><h2>Reporte para asesorías</h2><p class="muted">Se actualiza con cada intento. Los resultados nuevos también se sincronizan con el Panel de mamá.</p></div><div class="row noprint"><button class="secondary" id="downloadReport">Descargar reporte</button><button class="secondary" onclick="window.print()">Imprimir</button></div></div><div id="reportBody"><p class="muted">Todavía no hay intentos.</p></div></section>
+</div>
+
+</div></div>
+<div id="parentDashboard" class="hidden">
+  <div class="grid">
+    <section class="card span12">
+      <div class="top">
+        <div>
+          <h2>Panel de mamá</h2>
+          <p class="muted">Seguimiento de Aarón · Cambridge English + PIENSE II</p>
+        </div>
+        <div class="row"><span class="pill">Panel privado</span><button class="secondary noprint" id="parentLogoutBtn">Salir</button></div>
+      </div>
+    </section>
+    <section class="card span4"><div class="muted">Último resultado</div><div class="kpi" id="momLastScore">—</div><div class="muted">Se llenará con sus intentos</div></section>
+    <section class="card span4"><div class="muted">Prioridad</div><div class="kpi" style="font-size:20px">Áreas débiles</div><div class="muted">Tema → subtema → tipo de error</div></section>
+    <section class="card span4"><div class="muted">Asesoría</div><div class="kpi" style="font-size:20px">Dudas concretas</div><div class="muted">Para llevar con el profesor</div></section>
+    <section class="card span12">
+      <h2>Resultados y evolución</h2>
+      <div id="reportBodyParent"><p class="muted">El panel mostrará porcentajes por disciplina, tema y subtema conforme Aarón practique.</p></div>
+    </section>
+    <section class="card span12">
+      <div class="top"><div><h2>Intentos recientes</h2><p class="muted">Resultados sincronizados desde la nube. Puedes abrir este mismo archivo en otra computadora y entrar con tu acceso privado.</p></div><div class="row"><button class="secondary" onclick="window.print()">Imprimir</button><button class="secondary" id="downloadReportParent">Descargar reporte</button></div></div>
+      <div id="parentAttempts"></div>
+    </section>
+  </div>
+</div>
+<section id="setupView" class="card hidden" style="margin-top:16px"><div class="top"><div><h2 id="setupTitle"></h2><p id="setupDesc" class="muted"></p></div><button class="secondary" id="backSetup">Volver</button></div><div id="setupOptions" class="stack" style="margin-top:12px"></div><div class="row" style="margin-top:14px"><button id="startSession">Iniciar</button></div></section>
+<section id="examView" class="card hidden" style="margin-top:16px"><div class="top"><div><div id="examMeta" class="muted"></div><h2 id="examTopic"></h2></div><div class="pill" id="timeDisplay"></div></div><div class="progress" style="margin:12px 0 18px"><div id="progBar" style="width:0%"></div></div><div id="stimulus" class="note hidden"></div><h3 id="question"></h3><div id="listeningBox" class="hidden" style="margin:10px 0"><button class="ghost" id="playAudio">▶ Escuchar</button> <span id="listenCount" class="muted"></span></div><div id="answers" class="stack" style="margin-top:14px"></div><div id="feedback" class="feedback hidden" style="margin-top:14px"></div><div class="row" style="margin-top:14px"><button id="submitAnswer">Responder</button><button class="secondary hidden" id="nextQuestion">Siguiente</button><button class="secondary" id="quitSession">Terminar</button></div></section>
+<section id="resultView" class="hidden" style="margin-top:16px"><div class="grid"><div class="card span4"><div class="muted">Resultado</div><div id="score" class="score">0%</div><div id="scoreText"></div></div><div class="card span4"><div class="muted">Tiempo</div><div id="timeKpi" class="kpi"></div><div class="muted">duración del intento</div></div><div class="card span4"><div class="muted">Prioridad siguiente</div><div id="nextFocus" style="font-weight:800;font-size:18px;margin-top:6px"></div></div><div class="card span12">
+  <h2>Tu feedback</h2>
+  <div id="performanceFeedback"></div>
+</div>
+<div class="card span12"><h2>Desglose por subtema</h2><div id="breakdown"></div></div><div class="card span12"><h2>Dudas para asesoría</h2><div id="tutorDoubts"></div></div></div><div class="row" style="margin-top:14px"><button id="practiceWeak">Practicar áreas débiles</button><button class="secondary" id="goHome">Volver al inicio</button></div></section>
+<section id="historyView" class="card hidden" style="margin-top:16px"><div class="top"><div><h2>Historial</h2><p class="muted">Guardado localmente en este navegador.</p></div><button class="secondary" id="closeHistory">Volver</button></div><div id="historyBody"></div></section>
+</div>
+</div>
+<script>
+window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topic": "Language Use", "subtopic": "Present simple vs. present continuous", "level": "A2", "q": "Choose the best option: Right now, my brother ___ for his English exam.", "options": ["studies", "is studying", "study", "studied"], "answer": 1, "explanation": "“Right now” refers to an action happening at this moment, so the present continuous is required: “is studying”."}, {"id": "EN-GR-002", "area": "English", "topic": "Language Use", "subtopic": "Past simple", "level": "A2", "q": "Yesterday, Marta ___ the bus to school.", "options": ["takes", "took", "taken", "taking"], "answer": 1, "explanation": "“Yesterday” places the action in the past. The irregular past form of “take” is “took”."}, {"id": "EN-GR-003", "area": "English", "topic": "Language Use", "subtopic": "Present perfect", "level": "B1", "q": "I ___ this book three times, so I know the story well.", "options": ["read", "have read", "am reading", "was read"], "answer": 1, "explanation": "The present perfect connects a past experience with the present: “have read”."}, {"id": "EN-GR-004", "area": "English", "topic": "Language Use", "subtopic": "Comparatives", "level": "A2", "q": "This exercise is ___ than the previous one.", "options": ["difficult", "more difficult", "most difficult", "the difficult"], "answer": 1, "explanation": "For a multi-syllable adjective, the comparative is formed with “more”: “more difficult”."}, {"id": "EN-GR-005", "area": "English", "topic": "Language Use", "subtopic": "Conditionals", "level": "B1", "q": "If it rains tomorrow, we ___ at home.", "options": ["stay", "stayed", "will stay", "would stayed"], "answer": 2, "explanation": "This is a first conditional: if + present simple, then will + base verb."}, {"id": "EN-GR-006", "area": "English", "topic": "Language Use", "subtopic": "Modal verbs", "level": "B1", "q": "You ___ wear a seat belt. It is required by law.", "options": ["might", "must", "could", "would"], "answer": 1, "explanation": "“Must” expresses a strong obligation or requirement."}, {"id": "EN-GR-007", "area": "English", "topic": "Language Use", "subtopic": "Articles", "level": "A2", "q": "She wants to become ___ engineer.", "options": ["a", "an", "the", "no article"], "answer": 1, "explanation": "“Engineer” begins with a vowel sound, so the indefinite article is “an”."}, {"id": "EN-GR-008", "area": "English", "topic": "Language Use", "subtopic": "Prepositions", "level": "A2", "q": "The meeting starts ___ 4:30 p.m.", "options": ["in", "on", "at", "by"], "answer": 2, "explanation": "Use “at” with specific clock times."}, {"id": "EN-GR-009", "area": "English", "topic": "Language Use", "subtopic": "Subject-verb agreement", "level": "B1", "q": "The group of students ___ ready for the presentation.", "options": ["are", "is", "be", "were"], "answer": 1, "explanation": "The head noun is “group”, which is singular, so “is” is correct."}, {"id": "EN-GR-010", "area": "English", "topic": "Language Use", "subtopic": "Passive voice", "level": "B1", "q": "The results ___ tomorrow morning.", "options": ["announce", "will be announced", "will announce", "announced"], "answer": 1, "explanation": "The results receive the action, so the passive form is needed: “will be announced”."}, {"id": "EN-GR-011", "area": "English", "topic": "Language Use", "subtopic": "Relative clauses", "level": "B1", "q": "The teacher ___ helped me was very patient.", "options": ["which", "who", "where", "whose"], "answer": 1, "explanation": "Use “who” for a person acting as the subject of the relative clause."}, {"id": "EN-GR-012", "area": "English", "topic": "Language Use", "subtopic": "Gerund vs. infinitive", "level": "B2", "q": "She avoided ___ about the problem during class.", "options": ["to talk", "talking", "talk", "to talking"], "answer": 1, "explanation": "“Avoid” is followed by a gerund: “avoid talking”."}, {"id": "EN-GR-013", "area": "English", "topic": "Language Use", "subtopic": "Reported speech", "level": "B2", "q": "Tom said, “I am tired.” Choose the best reported form.", "options": ["Tom said that he is tired.", "Tom said that he was tired.", "Tom says he tired.", "Tom said that I was tired."], "answer": 1, "explanation": "In standard reported speech after a past reporting verb, “am” usually backshifts to “was”."}, {"id": "EN-GR-014", "area": "English", "topic": "Language Use", "subtopic": "Past perfect", "level": "B2", "q": "By the time we arrived, the movie ___.", "options": ["started", "has started", "had started", "starts"], "answer": 2, "explanation": "The movie started before another past event, so the past perfect “had started” is appropriate."}, {"id": "EN-GR-015", "area": "English", "topic": "Language Use", "subtopic": "Quantifiers", "level": "B1", "q": "There isn't ___ milk left in the refrigerator.", "options": ["many", "much", "few", "several"], "answer": 1, "explanation": "“Milk” is uncountable, so “much” is the correct quantifier here."}, {"id": "EN-GR-016", "area": "English", "topic": "Language Use", "subtopic": "Word order", "level": "A2", "q": "Choose the correct sentence.", "options": ["Always I do my homework after dinner.", "I always do my homework after dinner.", "I do always my homework after dinner.", "I my homework always do after dinner."], "answer": 1, "explanation": "Frequency adverbs normally go before the main verb: “I always do…”"}, {"id": "EN-VO-001", "area": "English", "topic": "Vocabulary", "subtopic": "Meaning in context", "level": "A2", "q": "In “The task was challenging but manageable,” what does “manageable” most nearly mean?", "options": ["Impossible", "Possible to handle", "Very confusing", "Extremely easy"], "answer": 1, "explanation": "“Manageable” means difficult enough to require effort but still possible to handle."}, {"id": "EN-VO-002", "area": "English", "topic": "Vocabulary", "subtopic": "Synonyms", "level": "B1", "q": "Which word is closest in meaning to “rapid”?", "options": ["slow", "quick", "silent", "careful"], "answer": 1, "explanation": "“Rapid” and “quick” both mean fast."}, {"id": "EN-VO-003", "area": "English", "topic": "Vocabulary", "subtopic": "Phrasal verbs", "level": "B1", "q": "What does “look after” mean in “Can you look after my dog?”", "options": ["Search for", "Take care of", "Look at", "Run after"], "answer": 1, "explanation": "“Look after” means to take care of someone or something."}, {"id": "EN-VO-004", "area": "English", "topic": "Vocabulary", "subtopic": "Collocations", "level": "B1", "q": "Choose the natural collocation: ___ a decision.", "options": ["do", "make", "take up", "put"], "answer": 1, "explanation": "English uses the collocation “make a decision”."}, {"id": "EN-VO-005", "area": "English", "topic": "Vocabulary", "subtopic": "Word formation", "level": "B2", "q": "Choose the correct noun form of “decide”.", "options": ["decisive", "decision", "deciding", "decided"], "answer": 1, "explanation": "The noun form is “decision”."}, {"id": "EN-VO-006", "area": "English", "topic": "Vocabulary", "subtopic": "Meaning in context", "level": "B2", "q": "In “The evidence was compelling,” what does “compelling” most nearly mean?", "options": ["Unconvincing", "Persuasive", "Unrelated", "Ordinary"], "answer": 1, "explanation": "In this context, “compelling” means convincing or persuasive."}, {"id": "EN-RD-001", "area": "English", "topic": "Reading", "subtopic": "Explicit information", "level": "A2", "stimulus": "Lena takes the train to school every morning. The trip usually takes twenty minutes, but today it took forty minutes because of a delay.", "q": "How long does Lena's train trip usually take?", "options": ["10 minutes", "20 minutes", "40 minutes", "60 minutes"], "answer": 1, "explanation": "The passage explicitly says the trip usually takes twenty minutes."}, {"id": "EN-RD-002", "area": "English", "topic": "Reading", "subtopic": "Inference", "level": "B1", "stimulus": "Leo studied every afternoon for two weeks. On test day, he finished early and reviewed every answer before submitting.", "q": "What can reasonably be inferred?", "options": ["He did not prepare.", "He took the test seriously.", "He forgot the test date.", "He disliked school."], "answer": 1, "explanation": "His sustained preparation and careful review support the inference that he took the test seriously."}, {"id": "EN-RD-003", "area": "English", "topic": "Reading", "subtopic": "Main idea", "level": "B1", "stimulus": "Many cities are planting more trees along streets and in public spaces. Trees provide shade, reduce heat, improve air quality, and can make neighborhoods more pleasant for residents.", "q": "What is the main idea?", "options": ["Cities should remove old streets.", "Trees offer several benefits in cities.", "Air quality cannot be improved.", "Residents dislike public spaces."], "answer": 1, "explanation": "The paragraph focuses on the multiple benefits of urban trees."}, {"id": "EN-RD-004", "area": "English", "topic": "Reading", "subtopic": "Reference words", "level": "B1", "stimulus": "Maya bought a new bicycle last week. She uses it to travel to soccer practice.", "q": "What does “it” refer to?", "options": ["last week", "soccer practice", "the bicycle", "Maya"], "answer": 2, "explanation": "The pronoun “it” refers to the singular object previously mentioned: the bicycle."}, {"id": "EN-RD-005", "area": "English", "topic": "Reading", "subtopic": "Purpose", "level": "B2", "stimulus": "Please remember that the library will close at 3 p.m. on Friday for maintenance. Books can still be returned through the outdoor drop box.", "q": "What is the main purpose of this notice?", "options": ["To advertise new books", "To explain a temporary schedule change", "To cancel library memberships", "To ask for volunteers"], "answer": 1, "explanation": "The notice informs readers about an early closing and how returns can still be made."}, {"id": "EN-RD-006", "area": "English", "topic": "Reading", "subtopic": "Inference", "level": "B2", "stimulus": "The restaurant was almost empty when Nora arrived, yet the host told her she would need to wait twenty minutes. Several tables were covered with reserved signs.", "q": "Why did Nora probably have to wait?", "options": ["The restaurant was closing.", "Most available tables were reserved.", "Nora arrived too early to eat.", "The host did not see her."], "answer": 1, "explanation": "The reserved signs explain why apparently empty tables were not available."}, {"id": "EN-RD-007", "area": "English", "topic": "Reading", "subtopic": "Author attitude", "level": "B2", "stimulus": "Although the new park took longer to build than expected, the final result has transformed an unused lot into a lively community space.", "q": "What is the writer's attitude toward the park?", "options": ["Mostly positive", "Strongly negative", "Completely indifferent", "Confused"], "answer": 0, "explanation": "The writer acknowledges a delay but emphasizes the positive transformation."}, {"id": "EN-RD-008", "area": "English", "topic": "Reading", "subtopic": "Text organization", "level": "B2", "stimulus": "First, the researchers collected water samples from three locations. Next, they measured temperature and acidity. Finally, they compared the results with data from the previous year.", "q": "How is the information mainly organized?", "options": ["Cause and effect", "Chronological process", "Problem and solution", "Comparison only"], "answer": 1, "explanation": "The sequence markers “First,” “Next,” and “Finally” show a chronological process."}, {"id": "EN-LS-001", "area": "English", "topic": "Listening", "subtopic": "Short conversation - detail", "level": "A2", "audio": "Woman: What time does the science club meet? Man: It usually meets at four, but today it starts at four thirty.", "q": "What time does the science club start today?", "options": ["4:00", "4:15", "4:30", "5:00"], "answer": 2, "explanation": "The speaker says that today the club starts at four thirty."}, {"id": "EN-LS-002", "area": "English", "topic": "Listening", "subtopic": "Short conversation - purpose", "level": "B1", "audio": "Boy: I left my notebook at home. Girl: You can use some of my paper and copy the notes later.", "q": "Why does the girl offer paper?", "options": ["He forgot his notebook.", "He needs to draw a picture.", "She wants his notes.", "The class is cancelled."], "answer": 0, "explanation": "The boy says he left his notebook at home, so she offers paper as a temporary solution."}, {"id": "EN-LS-003", "area": "English", "topic": "Listening", "subtopic": "Short talk - main idea", "level": "B1", "audio": "Attention students. Because the gym floor is being repaired, basketball practice will take place outside on the tennis courts this afternoon.", "q": "What is the announcement mainly about?", "options": ["A cancelled game", "A change of practice location", "New tennis rules", "A school holiday"], "answer": 1, "explanation": "The announcement explains that basketball practice is moving to the tennis courts."}, {"id": "EN-LS-004", "area": "English", "topic": "Listening", "subtopic": "Inference", "level": "B2", "audio": "Woman: Did you enjoy the concert? Man: The musicians were excellent, but I wish the people behind us had stopped talking.", "q": "What can be inferred about the man?", "options": ["He disliked the musicians.", "He was distracted by other audience members.", "He left before the concert began.", "He prefers silent movies."], "answer": 1, "explanation": "He praises the musicians but complains about people talking behind him, so he was distracted."}, {"id": "EN-LS-005", "area": "English", "topic": "Listening", "subtopic": "Short talk - detail", "level": "B2", "audio": "The museum tour begins at eleven. Please leave backpacks at the front desk, but you may keep small handbags and water bottles with you.", "q": "What must visitors leave at the front desk?", "options": ["Water bottles", "Small handbags", "Backpacks", "Tickets"], "answer": 2, "explanation": "The announcement specifically instructs visitors to leave backpacks at the front desk."}, {"id": "EN-LS-006", "area": "English", "topic": "Listening", "subtopic": "Inference", "level": "B2", "audio": "Man: I thought the assignment was due Friday. Woman: It was, but the teacher posted a message this morning giving us until Monday.", "q": "What happened to the deadline?", "options": ["It was cancelled.", "It was moved earlier.", "It was extended.", "It stayed the same."], "answer": 2, "explanation": "The original Friday deadline changed to Monday, so it was extended."}, {"id": "EN-GR-017", "area": "English", "topic": "Language Use", "subtopic": "Second conditional", "level": "B1", "q": "If I ___ more free time, I would join the school band.", "options": ["have", "had", "will have", "having"], "answer": 1, "explanation": "The second conditional uses if + past simple and would + base verb: “If I had…”"}, {"id": "EN-GR-018", "area": "English", "topic": "Language Use", "subtopic": "Present perfect vs. past simple", "level": "B2", "q": "I ___ London in 2024, but I ___ Paris yet.", "options": ["visited / haven't visited", "have visited / didn't visit", "visit / haven't visit", "visited / don't visit"], "answer": 0, "explanation": "A finished time in the past takes past simple (“visited in 2024”); “yet” commonly takes present perfect (“haven't visited yet”)."}, {"id": "EN-GR-019", "area": "English", "topic": "Language Use", "subtopic": "Future forms", "level": "B1", "q": "Look at those dark clouds! It ___ rain.", "options": ["is going to", "has", "was", "would"], "answer": 0, "explanation": "“Be going to” is used for a prediction based on present evidence."}, {"id": "EN-GR-020", "area": "English", "topic": "Language Use", "subtopic": "Linkers", "level": "B2", "q": "The experiment was difficult; ___, the students completed it successfully.", "options": ["however", "because", "unless", "therefore not"], "answer": 0, "explanation": "“However” introduces a contrast between difficulty and successful completion."}, {"id": "EN-VO-007", "area": "English", "topic": "Vocabulary", "subtopic": "Meaning in context", "level": "B1", "q": "In “The instructions were vague,” what does “vague” most nearly mean?", "options": ["unclear", "detailed", "exciting", "incorrectly printed"], "answer": 0, "explanation": "“Vague” means not clearly or precisely expressed."}, {"id": "EN-VO-008", "area": "English", "topic": "Vocabulary", "subtopic": "Phrasal verbs", "level": "B2", "q": "What does “figure out” mean in “We need to figure out the answer”?", "options": ["forget", "discover or understand", "write down", "avoid"], "answer": 1, "explanation": "“Figure out” means to understand or find the solution to something."}, {"id": "EN-VO-009", "area": "English", "topic": "Vocabulary", "subtopic": "Word formation", "level": "B1", "q": "Choose the correct adjective: The teacher gave a very ___ explanation.", "options": ["help", "helpful", "helpfully", "helped"], "answer": 1, "explanation": "An adjective is needed before “explanation”; “helpful” is the adjective form."}, {"id": "EN-VO-010", "area": "English", "topic": "Vocabulary", "subtopic": "Collocations", "level": "B2", "q": "Choose the natural expression: ___ attention.", "options": ["pay", "make", "do", "put"], "answer": 0, "explanation": "The standard collocation is “pay attention”."}, {"id": "EN-RD-009", "area": "English", "topic": "Reading", "subtopic": "Main idea", "level": "B2", "stimulus": "Some students believe studying longer always produces better results. Research on learning, however, suggests that short focused sessions with breaks can improve concentration and memory more effectively than very long sessions without rest.", "q": "What is the main point of the passage?", "options": ["Long study sessions are always best.", "Breaks prevent learning.", "Focused study with breaks can be more effective than simply studying longer.", "Students should stop studying."], "answer": 2, "explanation": "The passage contrasts study length with quality and argues for focused sessions with breaks."}, {"id": "EN-RD-010", "area": "English", "topic": "Reading", "subtopic": "Vocabulary in context", "level": "B1", "stimulus": "The coach praised the team's resilience after they recovered from a two-goal deficit and tied the match.", "q": "What does “resilience” most nearly mean here?", "options": ["ability to recover", "desire to quit", "lack of preparation", "physical size"], "answer": 0, "explanation": "Recovering from a difficult situation demonstrates resilience."}, {"id": "EN-RD-011", "area": "English", "topic": "Reading", "subtopic": "Inference", "level": "B2", "stimulus": "Evan checked the weather app twice before leaving and put a light jacket in his backpack even though the morning was warm.", "q": "What can reasonably be inferred?", "options": ["He expects the weather may change.", "He lost his backpack.", "He dislikes jackets.", "The app does not work."], "answer": 0, "explanation": "Checking the forecast and packing a jacket despite warm weather suggests he anticipates changing conditions."}, {"id": "EN-RD-012", "area": "English", "topic": "Reading", "subtopic": "Writer's purpose", "level": "B1", "stimulus": "Students are reminded to submit science-fair permission forms by Tuesday. Forms received after the deadline cannot be accepted.", "q": "Why was this notice written?", "options": ["To describe a science experiment", "To remind students of a deadline", "To announce winners", "To cancel the fair"], "answer": 1, "explanation": "The notice emphasizes when permission forms must be submitted."}, {"id": "EN-RD-013", "area": "English", "topic": "Reading", "subtopic": "Text cohesion", "level": "B2", "stimulus": "Rina wanted to improve her running time. She began training three mornings a week. ___, after two months, she was able to run five kilometers several minutes faster.", "q": "Which connector best completes the text?", "options": ["As a result", "In contrast", "For example", "Meanwhile not"], "answer": 0, "explanation": "The faster time is the result of regular training, so “As a result” fits."}, {"id": "EN-RD-014", "area": "English", "topic": "Reading", "subtopic": "Explicit information", "level": "B1", "stimulus": "The workshop begins at 9:15 a.m. Participants should arrive fifteen minutes early to register.", "q": "At what time should participants arrive?", "options": ["8:45", "9:00", "9:15", "9:30"], "answer": 1, "explanation": "Fifteen minutes before 9:15 a.m. is 9:00 a.m."}, {"id": "EN-RD-015", "area": "English", "topic": "Reading", "subtopic": "Inference", "level": "B2", "stimulus": "By the end of the presentation, nearly every seat was occupied and several people were standing near the back wall.", "q": "What can be inferred about the presentation?", "options": ["It attracted many people.", "It ended very early.", "Nobody was interested.", "It was held outdoors."], "answer": 0, "explanation": "A full room with people standing strongly suggests high attendance."}, {"id": "EN-LS-007", "area": "English", "topic": "Listening", "subtopic": "Short conversation - detail", "level": "A2", "audio": "Girl: Are you taking the bus home? Boy: No, my father is picking me up at the main entrance at five fifteen.", "q": "How is the boy getting home?", "options": ["By bus", "With his father", "On foot", "By train"], "answer": 1, "explanation": "He says his father is picking him up."}, {"id": "EN-LS-008", "area": "English", "topic": "Listening", "subtopic": "Short conversation - inference", "level": "B1", "audio": "Woman: You look tired. Man: I stayed up finishing my history project and only slept for four hours.", "q": "Why is the man tired?", "options": ["He exercised early.", "He slept very little.", "He missed the bus.", "He is ill."], "answer": 1, "explanation": "He explicitly says he slept only four hours because he was finishing a project."}, {"id": "EN-LS-009", "area": "English", "topic": "Listening", "subtopic": "Announcement - detail", "level": "B1", "audio": "Passengers for Flight 218 to Dallas should proceed to gate fourteen. Boarding will begin in ten minutes.", "q": "Where should passengers go?", "options": ["Gate 10", "Gate 12", "Gate 14", "Gate 18"], "answer": 2, "explanation": "The announcement directs passengers to gate fourteen."}, {"id": "EN-LS-010", "area": "English", "topic": "Listening", "subtopic": "Short talk - main idea", "level": "B2", "audio": "This semester, the school cafeteria will test a new system that lets students order lunch through an app before the break. The goal is to shorten lines and reduce waiting time.", "q": "What is the main purpose of the new system?", "options": ["To raise food prices", "To shorten lunch lines", "To replace the cafeteria", "To cancel the break"], "answer": 1, "explanation": "The speaker states that the goal is to shorten lines and reduce waiting time."}, {"id": "EN-LS-011", "area": "English", "topic": "Listening", "subtopic": "Short conversation - attitude", "level": "B2", "audio": "Boy: How was the new restaurant? Girl: The food was excellent, though the service took forever.", "q": "How does the girl feel about the restaurant?", "options": ["Completely negative", "Positive about the food but critical of the service", "She did not eat there", "She loved the service only"], "answer": 1, "explanation": "She praises the food but complains that service was very slow."}, {"id": "EN-LS-012", "area": "English", "topic": "Listening", "subtopic": "Announcement - purpose", "level": "B1", "audio": "Students, please remember that tomorrow's assembly will be held in the auditorium instead of the gym because of maintenance work.", "q": "Why is the location changing?", "options": ["The auditorium is smaller.", "The gym is under maintenance.", "The assembly was cancelled.", "There is a basketball game."], "answer": 1, "explanation": "The speaker says maintenance work in the gym is the reason."}, {"id": "EN-LS-013", "area": "English", "topic": "Listening", "subtopic": "Short conversation - detail", "level": "B2", "audio": "Woman: I can meet you at three, unless my dentist appointment runs late. Man: That's fine. Send me a message if you need to move it to three thirty.", "q": "What might happen?", "options": ["They may meet at 3:30 instead of 3:00.", "The dentist will join them.", "They will definitely cancel.", "They will meet in the morning."], "answer": 0, "explanation": "If the appointment runs late, the meeting may be moved from 3:00 to 3:30."}, {"id": "EN-LS-014", "area": "English", "topic": "Listening", "subtopic": "Short talk - sequence", "level": "B2", "audio": "To submit your project, first upload the document, then check the preview, and finally press the blue submit button.", "q": "What should students do immediately before pressing submit?", "options": ["Upload a new app", "Check the preview", "Print the project", "Email the teacher"], "answer": 1, "explanation": "The sequence is upload, check the preview, then press submit."}, {"id": "EN-LS-015", "area": "English", "topic": "Listening", "subtopic": "Inference", "level": "B2", "audio": "Man: The forecast says sunshine all afternoon. Woman: Good. Then we won't need to move the soccer practice indoors.", "q": "What can be inferred?", "options": ["Practice is cancelled.", "They expect to practice outside.", "It is currently snowing.", "The team has no field."], "answer": 1, "explanation": "Because the weather is expected to be sunny, they do not expect to move practice indoors."}], "piense": [{"id": "PI-HC-001", "area": "Habilidad cognoscitiva", "topic": "Transformaciones lógicas", "subtopic": "Orden y relaciones", "q": "Considera A, B, 3 y 4: A va antes que B; 3 está al lado de A; 4 va después de B. ¿Qué orden cumple las condiciones?", "options": ["3AB4", "A3B4", "4BA3", "B3A4"], "answer": 0, "explanation": "3 está al lado de A, A va antes de B y 4 debe quedar después de B. La secuencia 3-A-B-4 cumple todo."}, {"id": "PI-HC-002", "area": "Habilidad cognoscitiva", "topic": "Relaciones", "subtopic": "Analogías", "q": "Nube es a cielo como hoja es a:", "options": ["papel", "árbol", "tierra", "aire"], "answer": 1, "explanation": "La relación es elemento y lugar/estructura a la que pertenece: nube-cielo, hoja-árbol."}, {"id": "PI-HC-003", "area": "Habilidad cognoscitiva", "topic": "Patrones", "subtopic": "Secuencias numéricas", "q": "Completa la secuencia: 4, 9, 16, 25, ___", "options": ["30", "34", "36", "49"], "answer": 2, "explanation": "Son cuadrados consecutivos: 2², 3², 4², 5², por lo tanto sigue 6² = 36."}, {"id": "PI-HC-004", "area": "Habilidad cognoscitiva", "topic": "Razonamiento condicional", "subtopic": "Deducción", "q": "Todos los atletas entrenan. Luis es atleta. ¿Qué conclusión es necesariamente válida?", "options": ["Luis entrena", "Luis es entrenador", "Todos los que entrenan son atletas", "Luis compite hoy"], "answer": 0, "explanation": "Si todos los atletas entrenan y Luis es atleta, entonces Luis entrena."}, {"id": "PI-MA-001", "area": "Matemáticas", "topic": "Numeración y operación", "subtopic": "MCM", "q": "¿Cuál es el mínimo común múltiplo de 12 y 18?", "options": ["6", "24", "36", "72"], "answer": 2, "explanation": "12 = 2²·3 y 18 = 2·3². Tomando las mayores potencias: 2²·3² = 36."}, {"id": "PI-MA-002", "area": "Matemáticas", "topic": "Numeración y operación", "subtopic": "MCD", "q": "¿Cuál es el máximo común divisor de 48 y 72?", "options": ["6", "12", "24", "36"], "answer": 2, "explanation": "48 = 2⁴·3 y 72 = 2³·3². Factores comunes con menor exponente: 2³·3 = 24."}, {"id": "PI-MA-003", "area": "Matemáticas", "topic": "Álgebra", "subtopic": "Leyes de exponentes", "q": "Simplifica: x³ · x⁵", "options": ["x⁸", "x¹⁵", "2x⁸", "x²"], "answer": 0, "explanation": "Al multiplicar potencias de la misma base se suman exponentes: 3 + 5 = 8."}, {"id": "PI-MA-004", "area": "Matemáticas", "topic": "Álgebra", "subtopic": "Ecuaciones lineales", "q": "Resuelve: 4x + 7 = 31", "options": ["4", "5", "6", "8"], "answer": 2, "explanation": "4x = 24, entonces x = 6."}, {"id": "PI-MA-005", "area": "Matemáticas", "topic": "Álgebra", "subtopic": "Factor común", "q": "Factoriza: 8x² + 12x", "options": ["4x(2x+3)", "4(2x²+3x)", "8x(x+12)", "x(8x+12x)"], "answer": 0, "explanation": "El máximo factor común es 4x; al dividir queda 2x + 3."}, {"id": "PI-MA-006", "area": "Matemáticas", "topic": "Álgebra", "subtopic": "Diferencia de cuadrados", "q": "Factoriza: x² − 49", "options": ["(x−7)²", "(x−49)(x+1)", "(x−7)(x+7)", "x(x−49)"], "answer": 2, "explanation": "x² − 49 = x² − 7², una diferencia de cuadrados: (x−7)(x+7)."}, {"id": "PI-MA-007", "area": "Matemáticas", "topic": "Geometría y medición", "subtopic": "Teorema de Pitágoras", "q": "Un triángulo rectángulo tiene catetos de 6 y 8. ¿Cuánto mide la hipotenusa?", "options": ["10", "12", "14", "48"], "answer": 0, "explanation": "6² + 8² = 36 + 64 = 100; √100 = 10."}, {"id": "PI-MA-008", "area": "Matemáticas", "topic": "Geometría y medición", "subtopic": "Ángulos", "q": "Dos ángulos suplementarios suman:", "options": ["90°", "120°", "180°", "360°"], "answer": 2, "explanation": "Por definición, dos ángulos suplementarios suman 180°."}, {"id": "PI-MA-009", "area": "Matemáticas", "topic": "Estadística y probabilidad", "subtopic": "Media aritmética", "q": "¿Cuál es la media de 8, 10, 12, 14 y 16?", "options": ["10", "11", "12", "13"], "answer": 2, "explanation": "La suma es 60 y hay 5 datos: 60/5 = 12."}, {"id": "PI-MA-010", "area": "Matemáticas", "topic": "Estadística y probabilidad", "subtopic": "Probabilidad simple", "q": "En una bolsa hay 3 fichas rojas y 7 azules. ¿Cuál es la probabilidad de sacar una roja?", "options": ["3/7", "3/10", "7/10", "1/3"], "answer": 1, "explanation": "Hay 10 fichas en total y 3 favorables: 3/10."}, {"id": "PI-ES-001", "area": "Español", "topic": "Lengua", "subtopic": "Acentuación", "q": "¿Cuál oración usa correctamente la tilde?", "options": ["Tu sabes la respuesta.", "Tú sabes la respuesta.", "Tú sabés la respuesta.", "Tu sabés la respuesta."], "answer": 1, "explanation": "“Tú” lleva tilde diacrítica cuando funciona como pronombre personal."}, {"id": "PI-ES-002", "area": "Español", "topic": "Lengua", "subtopic": "Porque / por qué", "q": "¿Cuál oración está escrita correctamente?", "options": ["No sé porqué llegó tarde.", "No sé por qué llegó tarde.", "No sé porque llegó tarde.", "No sé por que llegó tarde."], "answer": 1, "explanation": "En una interrogación indirecta se usa “por qué” separado y con tilde."}, {"id": "PI-ES-003", "area": "Español", "topic": "Comprensión lectora", "subtopic": "Información explícita", "stimulus": "El museo abre de martes a domingo, de 10:00 a 18:00. Los lunes permanece cerrado.", "q": "¿Qué día está cerrado el museo?", "options": ["domingo", "lunes", "martes", "sábado"], "answer": 1, "explanation": "El texto lo dice de forma explícita: los lunes permanece cerrado."}, {"id": "PI-ES-004", "area": "Español", "topic": "Comprensión lectora", "subtopic": "Inferencia", "stimulus": "Marina guardó el paraguas mojado en la entrada y se quitó los zapatos antes de entrar.", "q": "¿Qué se puede inferir?", "options": ["Hace mucho calor.", "Probablemente estaba lloviendo.", "Marina fue a nadar.", "Se quedó sin paraguas."], "answer": 1, "explanation": "Que el paraguas esté mojado permite inferir que probablemente llovía."}, {"id": "PI-ES-005", "area": "Español", "topic": "Destrezas de redacción", "subtopic": "Coherencia", "q": "¿Qué oración es la mejor conclusión para un texto sobre hábitos de estudio?", "options": ["Ayer llovió mucho.", "Por ello, estudiar con constancia mejora la preparación.", "Mi mochila es azul.", "Las vacaciones empiezan pronto."], "answer": 1, "explanation": "La opción B resume de forma coherente la idea de hábitos de estudio."}]};
+</script>
+<script>
+
+(() => {
+  const bank = window.QUESTION_BANK;
+  const STUDENT_ACCESS = "AARON16";
+  const SUPABASE_RPC = "https://nnyrorvposedocccnula.supabase.co/rest/v1/rpc";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ueXJvcnZwb3NlZG9jY2NudWxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4ODg0MTcsImV4cCI6MjEwNjQ2NDQxN30.s3PfwWocV1R9eWtejL4u2hE31RlK3znbx3JvK4vlIPU";
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => [...document.querySelectorAll(s)];
+  const storeKey = "prepa-aaron-history-v1";
+  let cfg = {};
+  let s = {};
+  let parentCloudAttempts = [];
+
+  function history(){ try{return JSON.parse(localStorage.getItem(storeKey)||"[]")}catch(e){return []} }
+  function saveHistory(x){ const h=history(); h.unshift(x); localStorage.setItem(storeKey,JSON.stringify(h.slice(0,100))); }
+  async function saveCloud(attempt){
+    try{
+      const r=await fetch(SUPABASE_RPC+"/save_aaron_attempt",{
+        method:"POST",
+        mode:"cors",
+        headers:{
+          "Content-Type":"application/json",
+          "apikey":SUPABASE_ANON,
+          "Authorization":"Bearer "+SUPABASE_ANON
+        },
+        body:JSON.stringify({access_code:"Aaron16",attempt})
+      });
+      if(!r.ok) throw new Error("sync_failed_"+r.status);
+      return true;
+    }catch(e){
+      console.warn("No se pudo sincronizar este intento",e);
+      return false;
+    }
+  }
+  function shuffle(a){ return [...a].sort(()=>Math.random()-.5); }
+  function pct(a,b){ return b ? Math.round(a*100/b) : 0; }
+  function fmt(sec){ sec=Math.max(0,Math.round(sec)); return `${Math.floor(sec/60)}:${String(sec%60).padStart(2,"0")}`; }
+  function show(id){ ["dashboard","setupView","examView","resultView","historyView"].forEach(x=>$("#"+x)?.classList.add("hidden")); $("#"+id)?.classList.remove("hidden"); }
+  function todayISO(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+
+  function plan(){
+    const d=new Date(), day=d.getDay();
+    const beforeEnglish = todayISO() <= "2026-10-08";
+    let title, body, action;
+    let priority;
+    title="Recomendación de hoy";
+    if(beforeEnglish && day!==6 && day!==0){
+      priority="Prioridad: Cambridge English";
+      body="Hoy entra por el botón azul “Empezar práctica recomendada”. Harás una práctica guiada de Cambridge English y recibirás explicación después de cada respuesta.";
+      action="english-practice";
+    } else if(day===6){
+      priority="Prioridad: Matemáticas / Álgebra";
+      body="Hoy usa “Empezar práctica recomendada”. Harás PIENSE enfocado en Matemáticas para llegar a tu asesoría del domingo con dudas concretas.";
+      action="piense-practice";
+    } else if(day===0){
+      priority="Prioridad: repaso de asesoría";
+      body="Después de la asesoría, conviene repetir una práctica guiada de los subtemas trabajados y revisar qué dudas siguen abiertas.";
+      action="piense-practice";
+    } else {
+      priority="Prioridad: PIENSE II";
+      body="Hoy usa “Empezar práctica recomendada”. Trabajarás Habilidad cognoscitiva, Español y Matemáticas con explicación inmediata.";
+      action="piense-practice";
+    }
+    $("#todayTitle").textContent=title; $("#todayPlan").textContent=body; $("#priorityPill").textContent=priority;
+
+    const dayStart=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate());
+    const daysUntil=(y,m,d)=>Math.ceil((new Date(y,m-1,d)-dayStart(new Date()))/86400000);
+    const countText=(n,label)=>{
+      if(n>1) return `Faltan ${n} días`;
+      if(n===1) return "Es mañana";
+      if(n===0) return "Es hoy";
+      return `${label} ya pasó`;
+    };
+    const en=daysUntil(2026,10,8), ws=daysUntil(2026,10,19), ad=daysUntil(2026,10,24);
+    if($("#englishCountdown")) $("#englishCountdown").textContent=countText(en,"El examen");
+    if($("#workshopCountdown")) $("#workshopCountdown").textContent=countText(ws,"El taller");
+    if($("#admissionCountdown")) $("#admissionCountdown").textContent=countText(ad,"El examen");
+    const upcoming=[[en,"Inglés"],[ws,"Taller"],[ad,"Admisión"]].filter(x=>x[0]>=0).sort((a,b)=>a[0]-b[0])[0];
+    if($("#nextExamCountdown") && upcoming){
+      $("#nextExamCountdown").textContent=upcoming[0]===0 ? `${upcoming[1]}: hoy` : upcoming[0]===1 ? `${upcoming[1]}: mañana` : `${upcoming[1]}: faltan ${upcoming[0]} días`;
+    }
+    $("#quickStart").dataset.action=action;
+  }
+
+  function buildReport(){
+    const h=history(), box=$("#reportBody");
+    if(!h.length){box.innerHTML='<p class="muted">Todavía no hay intentos.</p>'; return}
+    const all = h.flatMap(x=>x.details||[]);
+    const groups={};
+    all.forEach(r=>{
+      const k=`${r.area} › ${r.topic} › ${r.subtopic}`;
+      groups[k] ||= {n:0,c:0};
+      groups[k].n++; if(r.correct) groups[k].c++;
+    });
+    const rows=Object.entries(groups).map(([k,v])=>({k,p:pct(v.c,v.n),n:v.n})).sort((a,b)=>a.p-b.p);
+    const weak=rows.slice(0,8);
+    const last=h[0];
+    const parentBox=$("#reportBodyParent");
+    if($("#momLastScore")) $("#momLastScore").textContent=last.score+"%";
+    const reportHtml=`<div class="grid" style="margin-top:8px">
+      <div class="span4"><div class="muted">Último intento</div><div class="kpi">${last.score}%</div><div>${last.label}</div></div>
+      <div class="span4"><div class="muted">Intentos guardados</div><div class="kpi">${h.length}</div></div>
+      <div class="span4"><div class="muted">Subtemas medidos</div><div class="kpi">${rows.length}</div></div>
+      <div class="span12"><h3>Prioridades de refuerzo</h3>${weak.map(r=>`<div class="barrow"><div>${r.k}<div class="smallbar"><span style="width:${r.p}%"></span></div></div><strong>${r.p}%</strong></div>`).join("")}</div>
+    </div>`;
+    box.innerHTML=reportHtml;
+    if(parentBox) parentBox.innerHTML=reportHtml;
+  }
+
+  function action(name){
+    if(name==="english-practice") setup("english","practice");
+    if(name==="english-sim") setup("english","simulation");
+    if(name==="piense-practice") setup("piense","practice");
+    if(name==="piense-sim") setup("piense","simulation");
+  }
+
+  function setup(subject, mode){
+    cfg={subject,mode,focus:"all"};
+    show("setupView");
+    const isEng=subject==="english";
+    $("#setupTitle").textContent = isEng ? (mode==="practice"?"Cambridge English · práctica guiada":"Cambridge English · examen prueba") : (mode==="practice"?"PIENSE II · práctica guiada":"PIENSE II · examen prueba");
+    $("#setupDesc").textContent = mode==="practice" ? "Después de cada respuesta verás por qué está bien o mal. El reporte baja hasta nivel de subtema." : "Sin explicaciones ni ayuda durante el examen. El tiempo corre para medir precisión y ritmo de respuesta. Al finalizar recibirás feedback completo.";
+    let html="";
+    if(mode==="practice"){
+      if(isEng){
+        html=`<label><strong>Enfoque</strong><select id="focusSel"><option value="all">Mixto adaptativo</option><option value="Language Use">Grammar / Language Use</option><option value="Vocabulary">Vocabulary</option><option value="Reading">Reading</option><option value="Listening">Listening</option></select></label>
+        <label><strong>Preguntas</strong><select id="countSel"><option>20</option><option selected>40</option><option>60</option></select></label>`;
+      } else {
+        html=`<label><strong>Área</strong><select id="focusSel"><option value="all">Mixto PIENSE</option><option value="Matemáticas">Matemáticas / Álgebra</option><option value="Habilidad cognoscitiva">Habilidad cognoscitiva</option><option value="Español">Español</option></select></label>
+        <label><strong>Preguntas</strong><select id="countSel"><option>20</option><option selected>40</option><option>60</option></select></label>`;
+      }
+    } else {
+      html = isEng
+        ? `<div class="note"><strong>Examen prueba Cambridge:</strong> hasta 90 minutos, sin explicaciones durante la prueba. Mezcla 60 reactivos de Language Use, Vocabulary, Reading y Listening para medir precisión y tiempo de respuesta. Al terminar verás tu feedback y áreas de refuerzo.</div>`
+        : `<div class="note"><strong>Examen prueba PIENSE II:</strong> sin explicaciones durante la prueba y con tiempo para medir precisión y ritmo. Incluye Habilidad cognoscitiva, Español y Matemáticas en esta versión de entrenamiento. Al finalizar verás tu feedback y áreas de refuerzo.</div>`;
+    }
+    $("#setupOptions").innerHTML=html;
+  }
+
+  function chooseQuestions(){
+    let arr = cfg.subject==="english" ? bank.english : bank.piense;
+    if(cfg.mode==="practice"){
+      const focus=$("#focusSel")?.value||"all";
+      const n=parseInt($("#countSel")?.value||"25",10);
+      if(focus!=="all") arr=arr.filter(q=>q.area===focus || q.topic===focus);
+      // Prioritize historically weak subtopics while preserving variety.
+      const h=history().flatMap(x=>x.details||[]);
+      const g={}; h.forEach(r=>{ const k=r.subtopic; g[k] ||= {n:0,c:0}; g[k].n++; if(r.correct)g[k].c++ });
+      arr=[...arr].sort((a,b)=>{
+        const pa=g[a.subtopic]?g[a.subtopic].c/g[a.subtopic].n:.65;
+        const pb=g[b.subtopic]?g[b.subtopic].c/g[b.subtopic].n:.65;
+        return pa-pb || Math.random()-.5;
+      });
+      if(arr.length<n){
+        let out=[]; while(out.length<n) out.push(...shuffle(arr)); arr=out.slice(0,n);
+      } else arr=arr.slice(0,n);
+    } else {
+      if(cfg.subject==="english"){
+        arr=shuffle(arr);
+        arr=shuffle(arr);
+      } else {
+        // Proportional training simulation using current starter bank.
+        let out=[]; while(out.length<60) out.push(...shuffle(arr)); arr=out.slice(0,60);
+      }
+    }
+    return arr;
+  }
+
+  function start(){
+    s={questions:chooseQuestions(),i:0,answers:[],started:Date.now(),current:null,listens:0};
+    show("examView");
+    renderQ();
+    clearInterval(s.timer);
+    s.timer=setInterval(()=>updateTime(),1000);
+    updateTime();
+  }
+
+  function updateTime(){
+    const elapsed=(Date.now()-s.started)/1000;
+    let limit=null;
+    if(cfg.mode==="simulation") limit = cfg.subject==="english" ? 90*60 : 100*60;
+    $("#timeDisplay").textContent = limit ? `Tiempo: ${fmt(limit-elapsed)}` : `Tiempo: ${fmt(elapsed)}`;
+    if(limit && elapsed>=limit){ finish(); }
+  }
+
+  function renderQ(){
+    const q=s.questions[s.i]; s.current=null; s.listens=0;
+    $("#examMeta").textContent=`${cfg.mode==="practice"?"Práctica guiada":"Examen prueba"} · Pregunta ${s.i+1} de ${s.questions.length} · ${q.area}`;
+    $("#examTopic").textContent=`${q.topic} › ${q.subtopic}`;
+    $("#progBar").style.width=`${(s.i/s.questions.length)*100}%`;
+    $("#question").textContent=q.q;
+    $("#stimulus").classList.toggle("hidden",!q.stimulus);
+    $("#stimulus").textContent=q.stimulus||"";
+    $("#listeningBox").classList.toggle("hidden",!q.audio);
+    $("#listenCount").textContent=q.audio?"Puedes escucharlo hasta 2 veces.":"";
+    $("#answers").innerHTML=q.options.map((o,i)=>`<label class="choice"><input type="radio" name="ans" value="${i}"> ${String.fromCharCode(65+i)}) ${o}</label>`).join("");
+    $$("#answers input").forEach(x=>x.addEventListener("change",e=>{s.current=+e.target.value; $$(".choice").forEach(z=>z.classList.remove("sel")); e.target.closest(".choice").classList.add("sel")}));
+    $("#feedback").className="feedback hidden";
+    $("#submitAnswer").classList.remove("hidden"); $("#nextQuestion").classList.add("hidden");
+  }
+
+  function answer(){
+    if(s.current===null){ $("#feedback").className="feedback bad"; $("#feedback").textContent="Selecciona una respuesta."; return }
+    const q=s.questions[s.i], ok=s.current===q.answer;
+    s.answers.push({id:q.id,area:q.area,topic:q.topic,subtopic:q.subtopic,level:q.level||"",correct:ok,chosen:s.current,answer:q.answer,question:q.q,explanation:q.explanation});
+    $("#submitAnswer").classList.add("hidden"); $("#nextQuestion").classList.remove("hidden");
+    if(cfg.mode==="practice"){
+      $("#feedback").className="feedback "+(ok?"good":"bad");
+      $("#feedback").innerHTML=`<strong>${ok?"✓ Correcto":"✕ Incorrecto"}</strong><div style="margin-top:6px">${q.explanation}</div>${!ok?`<div style="margin-top:6px"><strong>Respuesta correcta:</strong> ${q.options[q.answer]}</div>`:""}`;
+    } else {
+      $("#feedback").className="feedback";
+      $("#feedback").textContent="Respuesta registrada.";
+    }
+  }
+
+  function next(){
+    if(s.i<s.questions.length-1){s.i++; renderQ()} else finish();
+  }
+
+  function finish(){
+    clearInterval(s.timer);
+    const elapsed=Math.round((Date.now()-s.started)/1000), c=s.answers.filter(x=>x.correct).length, sc=pct(c,s.questions.length);
+    const rec={date:new Date().toISOString(),label:`${cfg.subject==="english"?"Cambridge English":"PIENSE II"} · ${cfg.mode==="practice"?"Práctica guiada":"Examen prueba"}`,score:sc,correct:c,total:s.questions.length,seconds:elapsed,details:s.answers};
+    saveHistory(rec);
+    show("resultView");
+    $("#score").textContent=sc+"%"; $("#scoreText").textContent=`${c} correctas de ${s.questions.length}`;
+    $("#timeKpi").textContent=fmt(elapsed);
+    const groups={}; s.answers.forEach(r=>{const k=`${r.topic} › ${r.subtopic}`;groups[k]||={n:0,c:0};groups[k].n++;if(r.correct)groups[k].c++});
+    const rows=Object.entries(groups).map(([k,v])=>({k,p:pct(v.c,v.n),n:v.n})).sort((a,b)=>a.p-b.p);
+    $("#breakdown").innerHTML=rows.map(r=>`<div class="barrow"><div>${r.k}<div class="smallbar"><span style="width:${r.p}%"></span></div></div><strong>${r.p}%</strong></div>`).join("");
+
+    const strongest=[...rows].sort((a,b)=>b.p-a.p)[0];
+    const weakest=[...rows].sort((a,b)=>a.p-b.p)[0];
+    const avgSec=s.answers.length ? Math.round(elapsed/s.answers.length) : 0;
+    let levelMsg=sc>=85
+      ? "Muy buen desempeño. Ya tienes una base sólida; ahora conviene mantener precisión y trabajar velocidad sin descuidar los detalles."
+      : sc>=70
+      ? "Vas avanzando bien. Hay una base funcional, pero todavía hay subtemas que conviene reforzar antes de subir la dificultad."
+      : sc>=55
+      ? "Hay avances, pero todavía necesitas reforzar varios conceptos antes de depender del tiempo. Prioriza entender los errores y después vuelve a medirte."
+      : "Este intento sirve como diagnóstico. Enfócate primero en aprender los subtemas débiles con Práctica guiada y vuelve al Examen prueba después.";
+    const modeMsg=cfg.mode==="practice"
+      ? "Como fue una Práctica guiada, usa las explicaciones de tus errores para repetir los subtemas débiles."
+      : "Como fue un Examen prueba, no recibiste ayuda durante el intento. Usa este resultado para medir qué tan bien respondes bajo tiempo.";
+    $("#performanceFeedback").innerHTML=`
+      <div class="note"><strong>${levelMsg}</strong></div>
+      <div class="grid" style="margin-top:10px">
+        <div class="module span4"><strong>Tu precisión</strong><span class="kpi">${sc}%</span></div>
+        <div class="module span4"><strong>Ritmo promedio</strong><span class="kpi">${avgSec}s</span><span class="muted">por pregunta</span></div>
+        <div class="module span4"><strong>Tu siguiente foco</strong><span>${weakest?.k||"Mantener práctica mixta"}</span></div>
+      </div>
+      <p>${modeMsg}</p>
+      ${strongest?`<p><strong>Fortaleza de este intento:</strong> ${strongest.k} (${strongest.p}%).</p>`:""}
+      ${weakest?`<p><strong>Área a reforzar:</strong> ${weakest.k} (${weakest.p}%).</p>`:""}
+    `;
+    const weak=rows.filter(r=>r.p<75).slice(0,5);
+    $("#nextFocus").textContent=weak[0]?.k||"Mantener práctica mixta";
+    const failed=s.answers.filter(r=>!r.correct);
+    $("#tutorDoubts").innerHTML=failed.length?failed.slice(0,10).map((r,i)=>`<div class="module" style="margin:8px 0"><strong>${i+1}. ${r.topic} › ${r.subtopic}</strong><div>${r.question}</div><div class="muted" style="margin-top:4px">${r.explanation}</div></div>`).join(""):'<p>Sin dudas prioritarias en este intento.</p>';
+    rec.exam_type = cfg.subject==="english" ? "Cambridge English" : "PIENSE II";
+    rec.mode = cfg.mode==="practice" ? "Práctica guiada" : "Examen prueba";
+    rec.breakdown = Object.fromEntries(rows.map(r=>[r.k,{percent:r.p,count:r.n}]));
+    rec.weak_areas = weak.map(r=>({label:r.k,percent:r.p,count:r.n}));
+    rec.tutor_questions = failed.slice(0,10).map(r=>({topic:r.topic,subtopic:r.subtopic,question:r.question,explanation:r.explanation}));
+    saveCloud(rec);
+    buildReport();
+  }
+
+  function historyView(){
+    show("historyView");
+    const h=history();
+    $("#historyBody").innerHTML=h.length?h.map(x=>`<div class="module" style="margin:8px 0"><strong>${new Date(x.date).toLocaleString()} · ${x.score}%</strong><div class="muted">${x.label} · ${x.correct}/${x.total} · ${fmt(x.seconds)}</div></div>`).join(""):'<p class="muted">Todavía no hay intentos.</p>';
+  }
+
+
+  function buildParentHistory(){
+    const h=history();
+    const box=$("#parentAttempts");
+    if(!box) return;
+    if(!h.length){
+      box.innerHTML='<div class="note"><strong>Aún no hay resultados sincronizados.</strong><br>En la versión pública final, los intentos de Aarón aparecerán aquí aunque él practique desde otra computadora.</div>';
+      return;
+    }
+    box.innerHTML=h.slice(0,10).map(x=>`<div class="module" style="margin:8px 0"><strong>${new Date(x.date).toLocaleString()} · ${x.score}%</strong><div class="muted">${x.label} · ${x.correct}/${x.total} · ${fmt(x.seconds)}</div></div>`).join("");
+  }
+
+
+  function renderCloudParent(attempts){
+    const a=attempts||[];
+    parentCloudAttempts = a;
+    $("#momLastScore").textContent=a.length ? a[0].score+"%" : "—";
+    const allBreakdowns={};
+    const weak=[];
+    const tutor=[];
+    a.forEach(x=>{
+      Object.entries(x.breakdown||{}).forEach(([k,v])=>{
+        const p=Number(v?.percent??0), n=Number(v?.count??0);
+        if(!allBreakdowns[k]) allBreakdowns[k]={weighted:0,n:0};
+        allBreakdowns[k].weighted += p*Math.max(n,1);
+        allBreakdowns[k].n += Math.max(n,1);
+      });
+      (x.weak_areas||[]).forEach(w=>weak.push(typeof w==="string"?{label:w}:w));
+      (x.tutor_questions||[]).forEach(q=>tutor.push(typeof q==="string"?{question:q}:q));
+    });
+    const topicRows=Object.entries(allBreakdowns)
+      .map(([k,v])=>({k,p:Math.round(v.weighted/v.n),n:v.n}))
+      .sort((x,y)=>x.p-y.p);
+
+    $("#reportBodyParent").innerHTML = a.length ? `
+      <div class="grid" style="margin-top:8px">
+        <div class="module span4"><strong>Intentos en la nube</strong><span class="kpi">${a.length}</span></div>
+        <div class="module span4"><strong>Promedio últimos 10</strong><span class="kpi">${Math.round(a.slice(0,10).reduce((s,x)=>s+x.score,0)/Math.min(a.length,10))}%</span></div>
+        <div class="module span4"><strong>Último intento</strong><span class="kpi">${a[0].score}%</span></div>
+      </div>
+      <h3 style="margin-top:18px">Desglose por tema y subtema</h3>
+      ${topicRows.length ? topicRows.map(r=>`<div class="barrow"><div><strong>${r.k}</strong><div class="muted">${r.n} reactivo${r.n===1?"":"s"}</div></div><div><strong>${r.p}%</strong><div class="smallbar"><span style="width:${r.p}%"></span></div></div></div>`).join("") : '<p class="muted">Los siguientes intentos irán llenando este desglose.</p>'}
+      <h3 style="margin-top:18px">Áreas prioritarias</h3>
+      ${weak.length ? [...new Map(weak.map(w=>[w.label||w.subtopic||JSON.stringify(w),w])).values()].slice(0,10).map(w=>`<div class="module" style="margin:7px 0"><strong>${w.label||w.subtopic||"Área a reforzar"}</strong>${w.percent!==undefined?`<span class="muted">${w.percent}% · ${w.count||0} reactivos</span>`:""}</div>`).join("") : '<p class="muted">Sin áreas prioritarias registradas todavía.</p>'}
+      <h3 style="margin-top:18px">Dudas para asesoría</h3>
+      ${tutor.length ? [...new Map(tutor.map(q=>[(q.question||JSON.stringify(q)),q])).values()].slice(0,12).map((q,i)=>`<div class="module" style="margin:7px 0"><strong>${i+1}. ${(q.topic||"")} ${(q.subtopic? "› "+q.subtopic:"")}</strong><div>${q.question||""}</div>${q.explanation?`<div class="muted" style="margin-top:4px">${q.explanation}</div>`:""}</div>`).join("") : '<p class="muted">Sin dudas registradas todavía.</p>'}
+    ` : '<p class="muted">Todavía no hay intentos guardados en la nube.</p>';
+
+    $("#parentAttempts").innerHTML = a.length ? a.slice(0,50).map(x=>`
+      <div class="module" style="margin:8px 0">
+        <strong>${new Date(x.created_at).toLocaleString()} · ${x.score}%</strong>
+        <div class="muted">${x.label} · ${x.mode} · ${x.correct}/${x.total} · ${fmt(x.seconds)}</div>
+      </div>`).join("") : '<p class="muted">Todavía no hay intentos.</p>';
+  }
+
+  async function tryParentLogin(accessCode){
+    const r=await fetch(SUPABASE_RPC+"/get_aaron_attempts",{
+      method:"POST",
+      mode:"cors",
+      headers:{
+        "Content-Type":"application/json",
+        "apikey":SUPABASE_ANON,
+        "Authorization":"Bearer "+SUPABASE_ANON
+      },
+      body:JSON.stringify({access_code:accessCode})
+    });
+    if(!r.ok) return false;
+    const attempts=await r.json();
+    $("#loginView").classList.add("hidden");
+    $("#app").classList.add("hidden");
+    $("#studentDashboard").classList.add("hidden");
+    $("#parentDashboard").classList.remove("hidden");
+    window.scrollTo(0,0);
+    renderCloudParent(Array.isArray(attempts)?attempts:[]);
+    return true;
+  }
+
+  function downloadParentReport(){
+    const a=parentCloudAttempts||[];
+    if(!a.length){alert("Aún no hay intentos sincronizados.");return}
+    const agg={};
+    a.forEach(x=>Object.entries(x.breakdown||{}).forEach(([k,v])=>{
+      const p=Number(v?.percent??0), n=Math.max(Number(v?.count??0),1);
+      agg[k] ||= {weighted:0,n:0};
+      agg[k].weighted += p*n; agg[k].n += n;
+    }));
+    const rows=Object.entries(agg).map(([k,v])=>({k,p:Math.round(v.weighted/v.n),n:v.n})).sort((x,y)=>x.p-y.p);
+    let txt=`REPORTE DE PREPARACIÓN - AARÓN ROMO\nFecha: ${new Date().toLocaleString()}\n\nÁREAS PRIORITARIAS\n`;
+    rows.slice(0,15).forEach(r=>txt+=`- ${r.k}: ${r.p}% (${r.n} reactivos)\n`);
+    txt+=`\nÚLTIMOS INTENTOS\n`;
+    a.slice(0,20).forEach(x=>txt+=`- ${new Date(x.created_at).toLocaleString()}: ${x.label} — ${x.score}% (${x.correct}/${x.total}) — ${fmt(x.seconds)}\n`);
+    const qs=[];
+    a.slice(0,8).forEach(x=>(x.tutor_questions||[]).forEach(q=>qs.push(typeof q==="string"?q:(q.question||""))));
+    if(qs.length){txt+=`\nDUDAS PARA ASESORÍA\n`;[...new Set(qs)].slice(0,15).forEach((q,i)=>txt+=`${i+1}. ${q}\n`);}
+    const blob=new Blob([txt],{type:"text/plain;charset=utf-8"}), link=document.createElement("a");
+    link.href=URL.createObjectURL(blob);link.download="reporte_aaron_cloud.txt";link.click();URL.revokeObjectURL(link.href);
+  }
+
+  function downloadReport(){
+    const h=history(); if(!h.length){alert("Aún no hay intentos.");return}
+    const all=h.flatMap(x=>x.details||[]), g={};
+    all.forEach(r=>{const k=`${r.area} > ${r.topic} > ${r.subtopic}`;g[k]||={n:0,c:0};g[k].n++;if(r.correct)g[k].c++});
+    const rows=Object.entries(g).map(([k,v])=>({k,p:pct(v.c,v.n)})).sort((a,b)=>a.p-b.p);
+    let txt=`REPORTE DE PREPARACIÓN - AARÓN\nFecha: ${new Date().toLocaleString()}\n\nÁREAS PRIORITARIAS\n`;
+    rows.slice(0,12).forEach(r=>txt+=`- ${r.k}: ${r.p}%\n`);
+    txt+=`\nÚLTIMOS INTENTOS\n`; h.slice(0,10).forEach(x=>txt+=`- ${new Date(x.date).toLocaleString()}: ${x.label} — ${x.score}% (${x.correct}/${x.total})\n`);
+    const blob=new Blob([txt],{type:"text/plain;charset=utf-8"}), a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);a.download="reporte_aaron.txt";a.click();URL.revokeObjectURL(a.href);
+  }
+
+  $("#loginBtn").addEventListener("click",async()=>{
+    const raw=$("#code").value.trim();
+    const code=raw.toUpperCase();
+    $("#loginMsg").textContent="";
+    if(code===STUDENT_ACCESS){
+      $("#loginView").classList.add("hidden");$("#app").classList.remove("hidden");
+      localStorage.setItem("prepa-aaron-access","student");
+      $("#studentDashboard").classList.remove("hidden");
+      $("#parentDashboard").classList.add("hidden");
+      plan();buildReport();
+      return;
+    }
+    $("#loginMsg").textContent="Verificando acceso…";
+    try{
+      const ok=await tryParentLogin(raw);
+      if(!ok) $("#loginMsg").textContent="No pude validar ese acceso. Revisa el código e intenta otra vez.";
+    }catch(e){
+      $("#loginMsg").textContent="No pude consultar los resultados en la nube. Cierra este archivo, vuelve a abrirlo e intenta de nuevo.";
+    }
+  });
+  $("#code").addEventListener("keydown",e=>{if(e.key==="Enter")$("#loginBtn").click()});
+  $("#logoutBtn").addEventListener("click",()=>{localStorage.removeItem("prepa-aaron-access");location.reload()});
+  $$("[data-action]").forEach(b=>b.addEventListener("click",()=>action(b.dataset.action)));
+  $("#quickStart").addEventListener("click",e=>action(e.currentTarget.dataset.action));
+  $("#backSetup").addEventListener("click",()=>show("dashboard"));
+  $("#startSession").addEventListener("click",start);
+  $("#submitAnswer").addEventListener("click",answer);
+  $("#nextQuestion").addEventListener("click",next);
+  $("#quitSession").addEventListener("click",()=>{ if(confirm("¿Terminar este intento?")) finish() });
+  $("#goHome").addEventListener("click",()=>show("dashboard"));
+  $("#practiceWeak").addEventListener("click",()=>setup(cfg.subject||"english","practice"));
+  $("#openHistory").addEventListener("click",historyView);
+  $("#closeHistory").addEventListener("click",()=>show("dashboard"));
+  $("#downloadReport").addEventListener("click",downloadReport);
+  $("#downloadReportParent")?.addEventListener("click",downloadParentReport);
+  $("#parentLogoutBtn")?.addEventListener("click",()=>location.reload());
+  $("#playAudio").addEventListener("click",()=>{
+    const q=s.questions[s.i]; if(!q?.audio||s.listens>=2)return;
+    s.listens++; $("#listenCount").textContent=`Escuchado ${s.listens}/2`;
+    if("speechSynthesis" in window){ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(q.audio);u.lang="en-US";u.rate=.9;speechSynthesis.speak(u) }
+    else alert(q.audio);
+  });
+
+  $("#todayLabel").textContent=new Date().toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+  const savedAccess=localStorage.getItem("prepa-aaron-access");
+  if(savedAccess==="student"){
+    $("#loginView").classList.add("hidden");$("#app").classList.remove("hidden");
+    $("#studentDashboard").classList.remove("hidden");$("#parentDashboard").classList.add("hidden");plan();buildReport();
+  }else if(savedAccess==="parent"){
+    localStorage.removeItem("prepa-aaron-access");
+  }
+})();
+
+</script>
+</body></html>
