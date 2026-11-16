@@ -284,10 +284,10 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
     let html="";
     if(mode==="practice"){
       if(isEng){
-        html=\`<label><strong>Enfoque</strong><select id="focusSel"><option value="all">Mixto adaptativo</option><option value="Language Use">Grammar / Language Use</option><option value="Vocabulary">Vocabulary</option><option value="Reading">Reading</option><option value="Listening">Listening</option></select></label>
-        <label><strong>Preguntas</strong><select id="countSel"><option>20</option><option selected>40</option><option>60</option></select></label>\`;
+        html=`<label><strong>Enfoque</strong><select id="focusSel"><option value="all">Mixto adaptativo</option><option value="Language Use">Grammar / Language Use</option><option value="Vocabulary">Vocabulary</option><option value="Reading">Reading</option><option value="Listening">Listening</option></select></label>
+        <label><strong>Preguntas</strong><select id="countSel"><option>20</option><option selected>40</option><option>60</option></select></label>`;
       } else {
-        html=\`<label><strong>Área</strong><select id="focusSel">
+        html=`<label><strong>Área</strong><select id="focusSel">
           <option value="all">Mixto PIENSE completo</option>
           <option value="Habilidad cognoscitiva">Habilidad cognoscitiva</option>
           <option value="Español">Español</option>
@@ -295,17 +295,17 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
           <option value="Inglés PIENSE">Inglés PIENSE</option>
         </select></label>
         <label><strong>Preguntas</strong><select id="countSel"><option>20</option><option selected>40</option><option>60</option></select></label>
-        <div class="note"><strong>Rotación anti-memorización:</strong> cada sesión crea nuevas variantes, cambia valores y mezcla opciones. Además conserva una cobertura mínima de las cuatro áreas cuando eliges “Mixto PIENSE completo”.</div>\`;
+        <div class="note"><strong>Rotación anti-memorización:</strong> cada sesión crea nuevas variantes, cambia valores y mezcla opciones. Además conserva una cobertura mínima de las cuatro áreas cuando eliges “Mixto PIENSE completo”.</div>`;
       }
     } else {
       html = isEng
-        ? \`<div class="note"><strong>Examen prueba Cambridge:</strong> hasta 90 minutos, sin explicaciones durante la prueba. Mezcla 60 reactivos de Language Use, Vocabulary, Reading y Listening.</div>\`
-        : \`<div class="note"><strong>Examen prueba PIENSE II:</strong> mezcla Habilidad cognoscitiva, Español, Matemáticas e Inglés PIENSE. Los reactivos se regeneran antes de cada intento.</div>
+        ? `<div class="note"><strong>Examen prueba Cambridge:</strong> hasta 90 minutos, sin explicaciones durante la prueba. Mezcla 60 reactivos de Language Use, Vocabulary, Reading y Listening.</div>`
+        : `<div class="note"><strong>Examen prueba PIENSE II:</strong> mezcla Habilidad cognoscitiva, Español, Matemáticas e Inglés PIENSE. Los reactivos se regeneran antes de cada intento.</div>
            <label><strong>Formato</strong><select id="simCountSel">
              <option value="60" selected>Examen prueba · 60 reactivos</option>
              <option value="154">Simulador completo · 154 reactivos (42 cognoscitiva, 37 español, 35 matemáticas, 40 inglés)</option>
            </select></label>
-           <p class="muted">El simulador completo usa la distribución de reactivos indicada en la guía PIENSE II. El cronómetro de esta plataforma es de entrenamiento y no sustituye las instrucciones del aplicador.</p>\`;
+           <p class="muted">El simulador completo usa la distribución de reactivos indicada en la guía PIENSE II. El cronómetro de esta plataforma es de entrenamiento y no sustituye las instrucciones del aplicador.</p>`;
     }
     $("#setupOptions").innerHTML=html;
   }
@@ -415,7 +415,7 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
   function updateTime(){
     const elapsed=(Date.now()-s.started)/1000;
     const limit=cfg.mode==="simulation" ? (cfg.timeLimit || (cfg.subject==="english"?90*60:70*60)) : null;
-    $("#timeDisplay").textContent = limit ? \`Tiempo: \${fmt(limit-elapsed)}\` : \`Tiempo: \${fmt(elapsed)}\`;
+    $("#timeDisplay").textContent = limit ? `Tiempo: ${fmt(limit-elapsed)}` : `Tiempo: ${fmt(elapsed)}`;
     if(limit && elapsed>=limit){ finish(); }
   }
 
