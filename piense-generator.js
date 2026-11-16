@@ -29,7 +29,7 @@
     const letters=shuffle(["M","R","S","T","K","P"]).slice(0,2), nums=shuffle(["3","5","7","8","11","14"]).slice(0,2);
     const order=shuffle([letters[0],letters[1],nums[0],nums[1]]);
     const [w,x,y,z]=order;
-    const prompt=\`¿Qué orden cumple todas las condiciones? \${w} está antes que \${x}; \${x} está al lado de \${y}; \${y} está antes que \${z}; \${w} está antes que \${z}.\`;
+    const prompt=`¿Qué orden cumple todas las condiciones? ${w} está antes que ${x}; ${x} está al lado de ${y}; ${y} está antes que ${z}; ${w} está antes que ${z}.`;
     const perms=shuffle([
       order.join(""),
       [x,w,y,z].join(""),
@@ -51,16 +51,16 @@
   ]);
   add("Habilidad cognoscitiva","Patrones","Secuencias complejas",(a,t,s)=>{
     const kind=rand(0,3);
-    if(kind===0){ const st=rand(2,9),d=rand(2,8); const seq=[0,1,2,3].map(i=>st+i*d); const ans=st+4*d; return make(a,t,s,\`Completa la secuencia: \${seq.join(", ")}, ___\`,ans,[ans+d,ans-d,ans+1],"La secuencia aumenta siempre la misma cantidad: "+d+".");}
-    if(kind===1){ const n=rand(2,5); const seq=[n*n,(n+1)**2,(n+2)**2,(n+3)**2]; const ans=(n+4)**2; return make(a,t,s,\`Completa la secuencia: \${seq.join(", ")}, ___\`,ans,[ans-2*(n+4)+1,ans+2*(n+4)+1,(n+5)**2],"Son cuadrados consecutivos.");}
-    if(kind===2){ const st=rand(2,6),r=2; const seq=[st,st*r,st*r*r,st*r*r*r]; const ans=st*r**4; return make(a,t,s,\`Completa la secuencia: \${seq.join(", ")}, ___\`,ans,[ans/2,ans+st,ans*2],"Cada término se obtiene multiplicando por 2.");}
-    const a1=rand(2,8),b1=rand(10,20); const seq=[a1,b1,a1+2,b1-2,a1+4,b1-4]; const ans=a1+6; return make(a,t,s,\`Completa la secuencia: \${seq.join(", ")}, ___\`,ans,[b1-6,a1+8,b1-8],"Hay dos secuencias intercaladas: una aumenta de 2 en 2 y la otra disminuye de 2 en 2.");
+    if(kind===0){ const st=rand(2,9),d=rand(2,8); const seq=[0,1,2,3].map(i=>st+i*d); const ans=st+4*d; return make(a,t,s,`Completa la secuencia: ${seq.join(", ")}, ___`,ans,[ans+d,ans-d,ans+1],"La secuencia aumenta siempre la misma cantidad: "+d+".");}
+    if(kind===1){ const n=rand(2,5); const seq=[n*n,(n+1)**2,(n+2)**2,(n+3)**2]; const ans=(n+4)**2; return make(a,t,s,`Completa la secuencia: ${seq.join(", ")}, ___`,ans,[ans-2*(n+4)+1,ans+2*(n+4)+1,(n+5)**2],"Son cuadrados consecutivos.");}
+    if(kind===2){ const st=rand(2,6),r=2; const seq=[st,st*r,st*r*r,st*r*r*r]; const ans=st*r**4; return make(a,t,s,`Completa la secuencia: ${seq.join(", ")}, ___`,ans,[ans/2,ans+st,ans*2],"Cada término se obtiene multiplicando por 2.");}
+    const a1=rand(2,8),b1=rand(10,20); const seq=[a1,b1,a1+2,b1-2,a1+4,b1-4]; const ans=a1+6; return make(a,t,s,`Completa la secuencia: ${seq.join(", ")}, ___`,ans,[b1-6,a1+8,b1-8],"Hay dos secuencias intercaladas: una aumenta de 2 en 2 y la otra disminuye de 2 en 2.");
   });
   add("Habilidad cognoscitiva","Patrones","Matrices",(a,t,s)=>{
     const x=rand(1,7), y=rand(2,8), k=rand(1,5);
     const row1=[x,y,x+y+k], row2=[x+1,y+1,x+y+k+2], ans=x+y+k+4;
-    const stim=\`\${row1.join(" | ")}\\n\${row2.join(" | ")}\\n\${x+2} | \${y+2} | ?\`;
-    return make(a,t,s,"En cada fila, el tercer número se obtiene sumando los dos primeros y agregando una constante. ¿Qué número falta?",ans,[ans-2,ans+2,x+y+k],\`En la primera fila: \${x}+\${y}+\${k}=\${row1[2]}. La misma regla se mantiene; por eso el valor faltante es \${ans}.\`,{stimulus:stim});
+    const stim=`${row1.join(" | ")}\\n${row2.join(" | ")}\\n${x+2} | ${y+2} | ?`;
+    return make(a,t,s,"En cada fila, el tercer número se obtiene sumando los dos primeros y agregando una constante. ¿Qué número falta?",ans,[ans-2,ans+2,x+y+k],`En la primera fila: ${x}+${y}+${k}=${row1[2]}. La misma regla se mantiene; por eso el valor faltante es ${ans}.`,{stimulus:stim});
   });
   addStatic("Habilidad cognoscitiva","Consideraciones lógicas","Diagramas y conjuntos",[
     ["Todos los músicos pertenecen al club A. Ningún integrante del club A pertenece al club B. Si Elena es música, ¿qué debe ser cierto?","Elena no pertenece al club B",["Elena pertenece al club B","Elena no pertenece al club A","Elena dirige ambos clubes"],"Si todos los músicos están en A y A no comparte integrantes con B, Elena no puede estar en B."],
@@ -215,102 +215,102 @@
   // MATEMÁTICAS
   add("Matemáticas","Numeración y operación","Números reales",(a,t,s)=>{
     const n=rand(2,15), d=rand(2,9), val=(n/d).toFixed(2);
-    return make(a,t,s,\`¿Cuál número es equivalente aproximadamente a \${n}/\${d}?\`,val,[((n+1)/d).toFixed(2),(n/(d+1)).toFixed(2),((n-1)/d).toFixed(2)],\`Al dividir \${n} entre \${d} se obtiene aproximadamente \${val}.\`);
+    return make(a,t,s,`¿Cuál número es equivalente aproximadamente a ${n}/${d}?`,val,[((n+1)/d).toFixed(2),(n/(d+1)).toFixed(2),((n-1)/d).toFixed(2)],`Al dividir ${n} entre ${d} se obtiene aproximadamente ${val}.`);
   });
   add("Matemáticas","Numeración y operación","Potencias y leyes de exponentes",(a,t,s)=>{
     const m=rand(2,7), n=rand(2,7), ans=m+n;
-    return make(a,t,s,\`Simplifica: x^\${m} · x^\${n}\`,\`x^\${ans}\`,[\`x^\${m*n}\`,\`x^\${Math.abs(m-n)}\`,\`2x^\${ans}\`],\`Al multiplicar potencias de la misma base, se suman exponentes: \${m}+\${n}=\${ans}.\`);
+    return make(a,t,s,`Simplifica: x^${m} · x^${n}`,`x^${ans}`,[`x^${m*n}`,`x^${Math.abs(m-n)}`,`2x^${ans}`],`Al multiplicar potencias de la misma base, se suman exponentes: ${m}+${n}=${ans}.`);
   });
   add("Matemáticas","Numeración y operación","Raíz cuadrada",(a,t,s)=>{
     const n=rand(4,18), sq=n*n;
-    return make(a,t,s,\`¿Cuál es √\${sq}?\`,n,[n-1,n+1,Math.floor(n/2)],\`\${n}×\${n}=\${sq}, por lo tanto √\${sq}=\${n}.\`);
+    return make(a,t,s,`¿Cuál es √${sq}?`,n,[n-1,n+1,Math.floor(n/2)],`${n}×${n}=${sq}, por lo tanto √${sq}=${n}.`);
   });
   add("Matemáticas","Numeración y operación","Operaciones y jerarquía",(a,t,s)=>{
     const x=rand(2,9),y=rand(2,9),z=rand(2,6),ans=x+y*z;
-    return make(a,t,s,\`Calcula: \${x} + \${y} × \${z}\`,ans,[(x+y)*z,x*y+z,ans+z],\`Primero se multiplica \${y}×\${z} y después se suma \${x}.\`);
+    return make(a,t,s,`Calcula: ${x} + ${y} × ${z}`,ans,[(x+y)*z,x*y+z,ans+z],`Primero se multiplica ${y}×${z} y después se suma ${x}.`);
   });
   add("Matemáticas","Numeración y operación","MCM y MCD",(a,t,s)=>{
     const pairs=[[12,18,36,6],[8,20,40,4],[15,25,75,5],[18,24,72,6]], p=pick(pairs);
     const ask=Math.random()<.5?"mcm":"MCD",ans=ask==="mcm"?p[2]:p[3];
-    return make(a,t,s,\`¿Cuál es el \${ask} de \${p[0]} y \${p[1]}?\`,ans,[p[2],p[3],p[0]*p[1]].filter(x=>x!==ans),\`Al descomponer ambos números en factores primos se obtiene \${ask} = \${ans}.\`);
+    return make(a,t,s,`¿Cuál es el ${ask} de ${p[0]} y ${p[1]}?`,ans,[p[2],p[3],p[0]*p[1]].filter(x=>x!==ans),`Al descomponer ambos números en factores primos se obtiene ${ask} = ${ans}.`);
   });
   add("Matemáticas","Álgebra","Expresiones algebraicas",(a,t,s)=>{
     const p=rand(2,9),q=rand(2,9),r=rand(1,7),u=rand(1,7), ca=p+r, cb=q-u;
-    return make(a,t,s,\`Reduce: (\${p}x + \${q}) + (\${r}x - \${u})\`,\`\${ca}x + \${cb}\`,[\`\${p+r}x + \${q+u}\`,\`\${p-r}x + \${q-u}\`,\`\${p*r}x + \${q-u}\`],"Se suman los términos semejantes en x y, por separado, los términos constantes.");
+    return make(a,t,s,`Reduce: (${p}x + ${q}) + (${r}x - ${u})`,`${ca}x + ${cb}`,[`${p+r}x + ${q+u}`,`${p-r}x + ${q-u}`,`${p*r}x + ${q-u}`],"Se suman los términos semejantes en x y, por separado, los términos constantes.");
   });
   add("Matemáticas","Álgebra","Ecuaciones en una variable",(a,t,s)=>{
     const x=rand(2,12),m=rand(2,8),b=rand(1,15),rhs=m*x+b;
-    return make(a,t,s,\`Resuelve: \${m}x + \${b} = \${rhs}\`,x,[x-1,x+1,rhs-b],\`Restando \${b} queda \${m}x=\${m*x}; al dividir entre \${m}, x=\${x}.\`);
+    return make(a,t,s,`Resuelve: ${m}x + ${b} = ${rhs}`,x,[x-1,x+1,rhs-b],`Restando ${b} queda ${m}x=${m*x}; al dividir entre ${m}, x=${x}.`);
   });
   add("Matemáticas","Álgebra","Inecuaciones en una variable",(a,t,s)=>{
     const k=rand(2,8),b=rand(1,10),x=rand(3,12),rhs=k*x+b;
-    return make(a,t,s,\`Resuelve: \${k}x + \${b} < \${rhs}\`,\`x < \${x}\`,[\`x > \${x}\`,\`x ≤ \${x}\`,\`x = \${x}\`],\`Restando \${b} y dividiendo entre \${k} (positivo) se conserva el signo: x < \${x}.\`);
+    return make(a,t,s,`Resuelve: ${k}x + ${b} < ${rhs}`,`x < ${x}`,[`x > ${x}`,`x ≤ ${x}`,`x = ${x}`],`Restando ${b} y dividiendo entre ${k} (positivo) se conserva el signo: x < ${x}.`);
   });
   add("Matemáticas","Álgebra","Ecuaciones lineales en varias variables",(a,t,s)=>{
     const x=rand(1,6),m=rand(2,5),b=rand(1,8),y=m*x+b;
-    return make(a,t,s,\`Si y = \${m}x + \${b}, ¿cuánto vale y cuando x=\${x}?\`,y,[y-m,y+b,m+b],\`Sustituye x=\${x}: y=\${m}(\${x})+\${b}=\${y}.\`);
+    return make(a,t,s,`Si y = ${m}x + ${b}, ¿cuánto vale y cuando x=${x}?`,y,[y-m,y+b,m+b],`Sustituye x=${x}: y=${m}(${x})+${b}=${y}.`);
   });
   add("Matemáticas","Álgebra","Polinomios",(a,t,s)=>{
     const deg=rand(2,5);
-    return make(a,t,s,\`¿Cuál es el grado del polinomio 4x^\${deg} - 3x² + 7?\`,deg,[deg-1,deg+1,2],"El grado de un polinomio es el mayor exponente de la variable con coeficiente distinto de cero.");
+    return make(a,t,s,`¿Cuál es el grado del polinomio 4x^${deg} - 3x² + 7?`,deg,[deg-1,deg+1,2],"El grado de un polinomio es el mayor exponente de la variable con coeficiente distinto de cero.");
   });
   add("Matemáticas","Álgebra","Factorización de polinomios",(a,t,s)=>{
     const k=rand(2,7),a1=rand(2,6),b1=rand(1,8);
     if(Math.random()<.5){
-      return make(a,t,s,\`Factoriza: \${k*a1}x² + \${k*b1}x\`,\`\${k}x(\${a1}x + \${b1})\`,[\`\${k}(\${a1}x²+\${b1}x)\`,\`x(\${k*a1}x+\${b1})\`,\`\${k}x(\${a1}x²+\${b1})\`],"Se extrae el factor común máximo, incluyendo x.");
+      return make(a,t,s,`Factoriza: ${k*a1}x² + ${k*b1}x`,`${k}x(${a1}x + ${b1})`,[`${k}(${a1}x²+${b1}x)`,`x(${k*a1}x+${b1})`,`${k}x(${a1}x²+${b1})`],"Se extrae el factor común máximo, incluyendo x.");
     }
     const n=rand(3,12),sq=n*n;
-    return make(a,t,s,\`Factoriza: x² - \${sq}\`,\`(x-\${n})(x+\${n})\`,[\`(x-\${n})²\`,\`(x-\${sq})(x+1)\`,\`x(x-\${sq})\`],\`Es una diferencia de cuadrados: x²-\${n}²=(x-\${n})(x+\${n}).\`);
+    return make(a,t,s,`Factoriza: x² - ${sq}`,`(x-${n})(x+${n})`,[`(x-${n})²`,`(x-${sq})(x+1)`,`x(x-${sq})`],`Es una diferencia de cuadrados: x²-${n}²=(x-${n})(x+${n}).`);
   });
   add("Matemáticas","Álgebra","Fracciones algebraicas",(a,t,s)=>{
     const n=rand(2,8);
-    return make(a,t,s,\`Simplifica: (\${n}x²)/(\${n}x), con x≠0\`,"x",[\`\${n}x\`,"x²",\`1/\${n}\`],"Se cancelan el factor común "+n+" y una potencia de x: x²/x=x.");
+    return make(a,t,s,`Simplifica: (${n}x²)/(${n}x), con x≠0`,"x",[`${n}x`,"x²",`1/${n}`],"Se cancelan el factor común "+n+" y una potencia de x: x²/x=x.");
   });
   add("Matemáticas","Álgebra","Ecuaciones cuadráticas",(a,t,s)=>{
     const r1=rand(1,7),r2=rand(1,7),sum=r1+r2,prod=r1*r2;
-    return make(a,t,s,\`¿Cuáles son las soluciones de x² - \${sum}x + \${prod}=0?\`,\`x=\${r1} y x=\${r2}\`,[\`x=-\${r1} y x=-\${r2}\`,\`x=\${sum} y x=\${prod}\`,\`x=0 y x=\${sum}\`],\`La ecuación factoriza como (x-\${r1})(x-\${r2})=0.\`);
+    return make(a,t,s,`¿Cuáles son las soluciones de x² - ${sum}x + ${prod}=0?`,`x=${r1} y x=${r2}`,[`x=-${r1} y x=-${r2}`,`x=${sum} y x=${prod}`,`x=0 y x=${sum}`],`La ecuación factoriza como (x-${r1})(x-${r2})=0.`);
   });
   add("Matemáticas","Álgebra","Plano cartesiano",(a,t,s)=>{
     const x=pick([-6,-4,-3,3,4,6]), y=pick([-7,-5,-2,2,5,7]);
     const quad=x>0&&y>0?"I":x<0&&y>0?"II":x<0&&y<0?"III":"IV";
-    return make(a,t,s,\`¿En qué cuadrante está el punto (\${x}, \${y})?\`,quad,["I","II","III","IV"].filter(v=>v!==quad),\`El signo de x es \${x>0?"positivo":"negativo"} y el de y es \${y>0?"positivo":"negativo"}, por lo que corresponde al cuadrante \${quad}.\`);
+    return make(a,t,s,`¿En qué cuadrante está el punto (${x}, ${y})?`,quad,["I","II","III","IV"].filter(v=>v!==quad),`El signo de x es ${x>0?"positivo":"negativo"} y el de y es ${y>0?"positivo":"negativo"}, por lo que corresponde al cuadrante ${quad}.`);
   });
   add("Matemáticas","Álgebra","Funciones y sus gráficas",(a,t,s)=>{
     const m=rand(2,5),b=rand(-5,5),x=rand(1,6),ans=m*x+b;
-    return make(a,t,s,\`Para f(x)=\${m}x\${b>=0?"+":""}\${b}, calcula f(\${x}).\`,ans,[ans-m,ans+m,m+b],\`Sustituye x=\${x}: f(\${x})=\${m}(\${x})\${b>=0?"+":""}\${b}=\${ans}.\`);
+    return make(a,t,s,`Para f(x)=${m}x${b>=0?"+":""}${b}, calcula f(${x}).`,ans,[ans-m,ans+m,m+b],`Sustituye x=${x}: f(${x})=${m}(${x})${b>=0?"+":""}${b}=${ans}.`);
   });
   add("Matemáticas","Álgebra","Sistemas de ecuaciones lineales",(a,t,s)=>{
     const x=rand(1,6),y=rand(1,6),s1=x+y,s2=x-y;
-    return make(a,t,s,\`Resuelve el sistema: x + y = \${s1}; x - y = \${s2}.\`,\`x=\${x}, y=\${y}\`,[\`x=\${y}, y=\${x}\`,\`x=\${s1}, y=\${s2}\`,\`x=\${x+1}, y=\${y-1}\`],"Al sumar ambas ecuaciones se obtiene 2x; después se sustituye para hallar y.");
+    return make(a,t,s,`Resuelve el sistema: x + y = ${s1}; x - y = ${s2}.`,`x=${x}, y=${y}`,[`x=${y}, y=${x}`,`x=${s1}, y=${s2}`,`x=${x+1}, y=${y-1}`],"Al sumar ambas ecuaciones se obtiene 2x; después se sustituye para hallar y.");
   });
   add("Matemáticas","Geometría y medición","Ángulos y triángulos",(a,t,s)=>{
     const A=rand(30,70),B=rand(30,70),C=180-A-B;
     if(C<=10) return make(a,t,s,"¿Cuánto suman los ángulos interiores de un triángulo?",180,[90,270,360],"Todo triángulo tiene 180° en la suma de sus ángulos interiores.");
-    return make(a,t,s,\`Un triángulo tiene ángulos de \${A}° y \${B}°. ¿Cuánto mide el tercero?\`,C,[180-A,180-B,A+B],\`Los ángulos interiores suman 180°: 180-\${A}-\${B}=\${C}°.\`);
+    return make(a,t,s,`Un triángulo tiene ángulos de ${A}° y ${B}°. ¿Cuánto mide el tercero?`,C,[180-A,180-B,A+B],`Los ángulos interiores suman 180°: 180-${A}-${B}=${C}°.`);
   });
   add("Matemáticas","Geometría y medición","Paralelas y secante",(a,t,s)=>{
     const ang=pick([35,40,50,60,70,75]);
-    return make(a,t,s,\`Dos rectas paralelas son cortadas por una secante. Si un ángulo correspondiente mide \${ang}°, ¿cuánto mide su ángulo correspondiente en la otra intersección?\`,ang,[180-ang,90-ang,ang+20],"Los ángulos correspondientes formados por una secante sobre rectas paralelas son congruentes.");
+    return make(a,t,s,`Dos rectas paralelas son cortadas por una secante. Si un ángulo correspondiente mide ${ang}°, ¿cuánto mide su ángulo correspondiente en la otra intersección?`,ang,[180-ang,90-ang,ang+20],"Los ángulos correspondientes formados por una secante sobre rectas paralelas son congruentes.");
   });
   add("Matemáticas","Geometría y medición","Congruencia y semejanza",(a,t,s)=>{
     const k=pick([2,3,4]), side=rand(3,9), ans=k*side;
-    return make(a,t,s,\`Dos triángulos son semejantes con razón de escala \${k}. Si un lado del menor mide \${side}, ¿cuánto mide el lado correspondiente del mayor?\`,ans,[side+k,side*k+1,side],"En figuras semejantes, los lados correspondientes guardan la misma razón de escala.");
+    return make(a,t,s,`Dos triángulos son semejantes con razón de escala ${k}. Si un lado del menor mide ${side}, ¿cuánto mide el lado correspondiente del mayor?`,ans,[side+k,side*k+1,side],"En figuras semejantes, los lados correspondientes guardan la misma razón de escala.");
   });
   add("Matemáticas","Geometría y medición","Pitágoras y triángulos especiales",(a,t,s)=>{
     const tri=pick([[3,4,5],[5,12,13],[6,8,10],[8,15,17]]);
-    return make(a,t,s,\`Un triángulo rectángulo tiene catetos de \${tri[0]} y \${tri[1]}. ¿Cuánto mide la hipotenusa?\`,tri[2],[tri[0]+tri[1],tri[2]+2,tri[1]],\`Por Pitágoras: \${tri[0]}²+\${tri[1]}²=\${tri[2]}².\`);
+    return make(a,t,s,`Un triángulo rectángulo tiene catetos de ${tri[0]} y ${tri[1]}. ¿Cuánto mide la hipotenusa?`,tri[2],[tri[0]+tri[1],tri[2]+2,tri[1]],`Por Pitágoras: ${tri[0]}²+${tri[1]}²=${tri[2]}².`);
   });
   add("Matemáticas","Geometría y medición","Círculos",(a,t,s)=>{
     const r=rand(2,10), d=2*r;
-    return make(a,t,s,\`Un círculo tiene radio \${r}. ¿Cuál es su diámetro?\`,d,[r,r*r,Math.round(Math.PI*r)],"El diámetro equivale a dos radios: d=2r.");
+    return make(a,t,s,`Un círculo tiene radio ${r}. ¿Cuál es su diámetro?`,d,[r,r*r,Math.round(Math.PI*r)],"El diámetro equivale a dos radios: d=2r.");
   });
   add("Matemáticas","Geometría y medición","Sólidos",(a,t,s)=>{
     const l=rand(2,8),w=rand(2,8),h=rand(2,8),v=l*w*h;
-    return make(a,t,s,\`Un prisma rectangular mide \${l}×\${w}×\${h}. ¿Cuál es su volumen?\`,v,[l+w+h,2*(l*w+l*h+w*h),l*w],\`El volumen de un prisma rectangular es largo×ancho×alto = \${v}.\`);
+    return make(a,t,s,`Un prisma rectangular mide ${l}×${w}×${h}. ¿Cuál es su volumen?`,v,[l+w+h,2*(l*w+l*h+w*h),l*w],`El volumen de un prisma rectangular es largo×ancho×alto = ${v}.`);
   });
   add("Matemáticas","Geometría y medición","Perímetro, área y volumen",(a,t,s)=>{
     const l=rand(4,12),w=rand(3,10),area=l*w;
-    return make(a,t,s,\`¿Cuál es el área de un rectángulo de \${l} por \${w} unidades?\`,area,[2*(l+w),l+w,area+2],\`Área = base×altura = \${l}×\${w}=\${area}.\`);
+    return make(a,t,s,`¿Cuál es el área de un rectángulo de ${l} por ${w} unidades?`,area,[2*(l+w),l+w,area+2],`Área = base×altura = ${l}×${w}=${area}.`);
   });
   add("Matemáticas","Estadística y probabilidad","Tablas y gráficas",(a,t,s)=>{
     const vals=[rand(3,9),rand(3,9),rand(3,9),rand(3,9)], labs=["A","B","C","D"], idx=vals.indexOf(Math.max(...vals));
@@ -319,15 +319,15 @@
   });
   add("Matemáticas","Estadística y probabilidad","Medidas de tendencia central",(a,t,s)=>{
     const vals=[rand(4,12),rand(4,12),rand(4,12),rand(4,12),rand(4,12)],sum=vals.reduce((x,y)=>x+y,0),mean=(sum/5).toFixed(1);
-    return make(a,t,s,\`Calcula la media de: \${vals.join(", ")}.\`,mean,[((sum+5)/5).toFixed(1),((sum-5)/5).toFixed(1),String(vals.sort((x,y)=>x-y)[2])],\`La media es la suma \${sum} dividida entre 5: \${mean}.\`);
+    return make(a,t,s,`Calcula la media de: ${vals.join(", ")}.`,mean,[((sum+5)/5).toFixed(1),((sum-5)/5).toFixed(1),String(vals.sort((x,y)=>x-y)[2])],`La media es la suma ${sum} dividida entre 5: ${mean}.`);
   });
   add("Matemáticas","Estadística y probabilidad","Probabilidad de un evento",(a,t,s)=>{
     const red=rand(2,8),blue=rand(2,8),tot=red+blue;
-    return make(a,t,s,\`En una bolsa hay \${red} fichas rojas y \${blue} azules. ¿Cuál es la probabilidad de sacar una roja?\`,\`\${red}/\${tot}\`,[\`\${blue}/\${tot}\`,\`\${red}/\${blue}\`,\`1/\${tot}\`],"La probabilidad es casos favorables entre casos totales.");
+    return make(a,t,s,`En una bolsa hay ${red} fichas rojas y ${blue} azules. ¿Cuál es la probabilidad de sacar una roja?`,`${red}/${tot}`,[`${blue}/${tot}`,`${red}/${blue}`,`1/${tot}`],"La probabilidad es casos favorables entre casos totales.");
   });
   add("Matemáticas","Estadística y probabilidad","Espacio muestral",(a,t,s)=>{
     const coins=rand(2,3),ans=2**coins;
-    return make(a,t,s,\`Si se lanzan \${coins} monedas, ¿cuántos resultados posibles hay en el espacio muestral?\`,ans,[coins*2,ans-1,ans+2],\`Cada moneda tiene 2 resultados posibles; con \${coins} monedas hay 2^\${coins}=\${ans} resultados.\`);
+    return make(a,t,s,`Si se lanzan ${coins} monedas, ¿cuántos resultados posibles hay en el espacio muestral?`,ans,[coins*2,ans-1,ans+2],`Cada moneda tiene 2 resultados posibles; con ${coins} monedas hay 2^${coins}=${ans} resultados.`);
   });
 
   // INGLÉS PIENSE
