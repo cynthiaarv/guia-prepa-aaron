@@ -23,6 +23,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Validate PIENSE generator
+        run: |
+          node --check piense-generator.js
+          node - <<'NODE'
+          global.window=global;
+          require('./piense-generator.js');
+          const pool=global.generatePiensePool(800);
+          const required=['Habilidad cognoscitiva','Español','Matemáticas','Inglés PIENSE'];
+          for (const area of required) {
+            if (!pool.some(q=>q.area===area)) throw new Error('Missing area: '+area);
+          }
+          if (pool.some(q=>!Array.isArray(q.options)||q.options.length!==4||q.answer<0||q.answer>3)) throw new Error('Invalid question shape');
+          console.log('Generated',pool.length,'valid PIENSE questions across all four areas');
+          NODE
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:

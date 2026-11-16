@@ -285,7 +285,7 @@
   });
   add("Matemáticas","Geometría y medición","Ángulos y triángulos",(a,t,s)=>{
     const A=rand(30,70),B=rand(30,70),C=180-A-B;
-    if(C<=10) return window.generatePiensePool(1).find(q=>q.subtopic===s)||make(a,t,s,"¿Cuánto suman los ángulos interiores de un triángulo?",180,[90,270,360],"Todo triángulo tiene 180° en la suma de sus ángulos interiores.");
+    if(C<=10) return make(a,t,s,"¿Cuánto suman los ángulos interiores de un triángulo?",180,[90,270,360],"Todo triángulo tiene 180° en la suma de sus ángulos interiores.");
     return make(a,t,s,\`Un triángulo tiene ángulos de \${A}° y \${B}°. ¿Cuánto mide el tercero?\`,C,[180-A,180-B,A+B],\`Los ángulos interiores suman 180°: 180-\${A}-\${B}=\${C}°.\`);
   });
   add("Matemáticas","Geometría y medición","Paralelas y secante",(a,t,s)=>{
