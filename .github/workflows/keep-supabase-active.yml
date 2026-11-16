@@ -1,6 +1,10 @@
 name: Keep Supabase active
 
 on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/keep-supabase-active.yml"
   schedule:
     - cron: "17 13 * * *"
   workflow_dispatch:
