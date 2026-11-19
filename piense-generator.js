@@ -427,6 +427,140 @@
     ["Combine: “Sam checked the calculations. Sam submitted the assignment.”","After checking the calculations, Sam submitted the assignment.",["Sam submitted because calculations after.","Checking submitted Sam calculations assignment.","Sam calculations and assignment because."],"The combined sentence clearly shows the sequence of actions."]
   ]);
 
+
+  // RETO MÁXIMO PREPATEC — reactivos originales, más demandantes, dentro de los mismos dominios.
+  const HARD = [];
+  function hard(area,topic,subtopic,fn){ HARD.push(()=>fn(area,topic,subtopic)); }
+
+  hard("Habilidad cognoscitiva","Transformaciones lógicas","Orden de letras y números",(a,t,s)=>{
+    const items=shuffle(["K","M","P","R","T"]);
+    const correct=items.join(" – ");
+    const [A,B,C,D,E]=items;
+    const prompt=`Cinco elementos deben ordenarse. ${A} va antes que ${B}; ${C} va inmediatamente después de ${B}; ${D} no puede ir en un extremo; y ${E} va después de ${D}. ¿Qué orden satisface todas las condiciones?`;
+    const d1=[B,A,C,D,E].join(" – "), d2=[A,B,C,E,D].join(" – "), d3=[A,D,B,C,E].join(" – ");
+    return make(a,t,s,prompt,correct,[d1,d2,d3],"Comprueba una condición a la vez. La correcta debe satisfacer simultáneamente el orden, la adyacencia y la restricción de extremos.",{level:"Reto máximo"});
+  });
+
+  hard("Habilidad cognoscitiva","Patrones","Secuencias complejas",(a,t,s)=>{
+    const x=rand(2,6);
+    const seq=[x,x*2+1,(x*2+1)*2-1,((x*2+1)*2-1)*2+1];
+    const ans=seq[3]*2-1;
+    return make(a,t,s,`Completa la secuencia: ${seq.join(", ")}, ___`,ans,[ans+2,ans-2,seq[3]*2+1],"La operación alterna ×2+1 y ×2−1. Hay que identificar las dos reglas intercaladas, no una sola diferencia.",{level:"Reto máximo"});
+  });
+
+  hard("Habilidad cognoscitiva","Patrones","Matrices",(a,t,s)=>{
+    const x=rand(2,6), y=rand(3,8);
+    const r1=[x,y,x*y+1], r2=[x+1,y-1,(x+1)*(y-1)+1], ans=(x+2)*(y-2)+1;
+    const stim=`${r1.join(" | ")}\n${r2.join(" | ")}\n${x+2} | ${y-2} | ?`;
+    return make(a,t,s,"En cada fila se aplica la misma regla a los dos primeros números para obtener el tercero. ¿Qué valor falta?",ans,[ans-1,ans+2,(x+2)+(y-2)+1],"La regla es multiplicar los dos primeros valores y sumar 1. Debe funcionar en todas las filas.",{stimulus:stim,level:"Reto máximo"});
+  });
+
+  hard("Habilidad cognoscitiva","Consideraciones lógicas","Razonamiento condicional",(a,t,s)=>{
+    const prompt="Si un alumno entrega el proyecto, entonces asistió al taller. Si asistió al taller, recibió la guía. Algunos alumnos que recibieron la guía no hicieron el simulacro. Aarón NO recibió la guía. ¿Qué conclusión es necesariamente válida?";
+    return make(a,t,s,prompt,"Aarón no entregó el proyecto",["Aarón hizo el simulacro","Aarón asistió al taller","Todo el que recibió la guía entregó el proyecto"],"Si entregar implica asistir y asistir implica recibir la guía, no haber recibido la guía descarta haber asistido y, por cadena, descarta haber entregado el proyecto.",{level:"Reto máximo"});
+  });
+
+  hard("Habilidad cognoscitiva","Razonamiento práctico","Solución de problemas cotidianos",(a,t,s)=>{
+    const prompt="Tres actividades usan el mismo salón: A dura 35 min y debe terminar antes de las 17:00; B dura 50 min y puede iniciar desde las 16:00; C dura 25 min y debe iniciar después de A. El salón está libre desde las 15:40. ¿Qué plan cumple todas las restricciones?";
+    return make(a,t,s,prompt,"A 15:40–16:15, C 16:15–16:40, B 16:40–17:30",["B 15:40–16:30, A 16:30–17:05, C 17:05–17:30","C 15:40–16:05, A 16:05–16:40, B 16:40–17:30","A 15:40–16:15, B 16:15–17:05, C 17:05–17:30"],"A debe terminar antes de las 17:00, C debe ir después de A y B no puede comenzar antes de las 16:00. Solo una opción cumple todo.",{level:"Reto máximo"});
+  });
+
+  const hardEsPassages=[
+    {
+      text:"Una ciudad instaló sensores para medir el uso de agua en parques públicos. Durante los primeros meses, el consumo bajó 18%, pero el informe técnico advierte que ese cambio coincidió con una temporada más lluviosa. Los responsables decidieron mantener los sensores durante un año completo antes de atribuirles el ahorro.",
+      main:"Los datos iniciales sugieren ahorro, pero aún no permiten atribuirlo únicamente a los sensores.",
+      infer:"Los responsables buscan separar el efecto de los sensores del efecto de la lluvia.",
+      tone:"cauteloso y analítico"
+    },
+    {
+      text:"Una escuela amplió el horario de biblioteca y observó mayor asistencia por la tarde. Sin embargo, la cantidad de préstamos no aumentó en la misma proporción. La dirección concluyó que el espacio también se estaba utilizando para estudiar, trabajar en equipo y acceder a internet.",
+      main:"La ampliación del horario aumentó usos de la biblioteca que no se reflejan solo en préstamos.",
+      infer:"Medir únicamente préstamos subestimaría parte del uso real de la biblioteca.",
+      tone:"informativo y razonado"
+    }
+  ];
+  hard("Español","Comprensión y análisis de lectura","Idea central e inferencia",(a,t,s)=>{
+    const p=pick(hardEsPassages);
+    return make(a,t,s,"¿Cuál opción expresa MEJOR la idea central del texto?",p.main,[p.infer,"El texto demuestra que la primera explicación siempre es correcta.","El texto rechaza por completo los datos obtenidos."],"La idea central integra la información principal y la cautela del autor; una inferencia válida no sustituye la idea central.",{stimulus:p.text,level:"Reto máximo"});
+  });
+  hard("Español","Comprensión y análisis de lectura","Inferencias",(a,t,s)=>{
+    const p=pick(hardEsPassages);
+    return make(a,t,s,"¿Qué inferencia está mejor sustentada por la lectura?",p.infer,[p.main,"El autor afirma que no vale la pena recopilar más datos.","El texto prueba una relación causal definitiva."],"La inferencia correcta se desprende de las decisiones o conclusiones descritas sin añadir información que el texto no respalda.",{stimulus:p.text,level:"Reto máximo"});
+  });
+  hard("Español","Comprensión y análisis de lectura","Tono y propósito",(a,t,s)=>{
+    const p=pick(hardEsPassages);
+    return make(a,t,s,"¿Qué combinación describe MEJOR el tono del texto?",p.tone,["emocional y alarmista","sarcástico y crítico","celebratorio y absoluto"],"El tono se reconoce por el grado de certeza, las reservas y la forma de presentar los datos.",{stimulus:p.text,level:"Reto máximo"});
+  });
+
+  hard("Español","Lengua","Concordancia y estructura",(a,t,s)=>{
+    const prompt="Seleccione la oración que está escrita CORRECTAMENTE.";
+    return make(a,t,s,prompt,"Ni el director ni los profesores consideraron suficientes las evidencias presentadas.",["Ni el director ni los profesores consideró suficiente las evidencias presentadas.","Ni el director ni los profesores consideraron suficiente las evidencia presentada.","Ni el director ni los profesores consideró suficientes las evidencias presentada."],"Con sujeto compuesto plural, el verbo va en plural; además, «suficientes» concuerda con «evidencias».",{level:"Reto máximo"});
+  });
+
+  hard("Español","Destrezas de redacción","Precisión y concisión",(a,t,s)=>{
+    const prompt="¿Cuál opción expresa la idea con MAYOR precisión y concisión? «El comité volvió a repetir nuevamente la revisión del documento para poder verificarlo otra vez».";
+    return make(a,t,s,prompt,"El comité revisó nuevamente el documento para verificarlo.",["El comité volvió a repetir nuevamente la revisión otra vez.","El comité hizo una revisión del documento para poder verificarlo nuevamente otra vez.","Nuevamente, el comité volvió a revisar otra vez el documento para verificarlo."],"Se eliminan redundancias como «volvió a repetir», «nuevamente» y «otra vez», conservando el significado.",{level:"Reto máximo"});
+  });
+
+  hard("Español","Destrezas de redacción","Coherencia y conectores",(a,t,s)=>{
+    const prompt="Completa con el conector que hace más precisa la relación: «Los resultados iniciales fueron favorables; ___, la muestra era pequeña y se decidió repetir el estudio».";
+    return make(a,t,s,prompt,"sin embargo",["por lo tanto","además","por ejemplo"],"La segunda idea introduce una reserva que contrasta con el resultado favorable; «sin embargo» expresa esa relación.",{level:"Reto máximo"});
+  });
+
+  hard("Matemáticas","Numeración y operación","Operaciones con fracciones y porcentajes",(a,t,s)=>{
+    const price=pick([480,600,720,840]), disc=pick([15,20,25]), tax=16;
+    const after=price*(1-disc/100), ans=(after*(1+tax/100)).toFixed(2);
+    return make(a,t,s,`Un artículo cuesta ${price}. Se aplica primero un descuento de ${disc}% y después IVA de ${tax}% sobre el precio descontado. ¿Cuál es el precio final?`,`${ans}`,[`${(price*(1+(tax-disc)/100)).toFixed(2)}`,`${(price*(1-disc/100-tax/100)).toFixed(2)}`,`${(price*(1+tax/100)).toFixed(2)}`],"Los porcentajes se aplican de forma sucesiva, no se suman ni restan directamente: primero descuento y después IVA sobre el nuevo precio.",{level:"Reto máximo"});
+  });
+
+  hard("Matemáticas","Álgebra","Ecuaciones e inecuaciones",(a,t,s)=>{
+    const k=rand(2,5), b=rand(3,9), rhs=rand(18,35);
+    const threshold=(rhs+b)/k;
+    return make(a,t,s,`Resuelve la inecuación: ${k}x - ${b} > ${rhs}`,`x > ${threshold}`,[`x < ${threshold}`,`x > ${(rhs-b)/k}`,`x < ${(rhs-b)/k}`],`Suma ${b} a ambos lados y divide entre ${k}, que es positivo; por eso el signo no cambia.`,{level:"Reto máximo"});
+  });
+
+  hard("Matemáticas","Álgebra","Sistemas de ecuaciones lineales",(a,t,s)=>{
+    const x=rand(2,8), y=rand(2,8);
+    const a1=2*x+3*y, a2=3*x-y;
+    return make(a,t,s,`Resuelve el sistema: 2x + 3y = ${a1}; 3x - y = ${a2}.`,`x=${x}, y=${y}`,[`x=${y}, y=${x}`,`x=${x+1}, y=${y-1}`,`x=${x-1}, y=${y+1}`],"Conviene despejar y en la segunda ecuación o eliminar una variable. Luego verifica la solución en ambas ecuaciones.",{level:"Reto máximo"});
+  });
+
+  hard("Matemáticas","Álgebra","Ecuaciones cuadráticas",(a,t,s)=>{
+    const r1=rand(2,7), r2=-rand(2,7), sum=r1+r2, prod=r1*r2;
+    const mid=sum===0?"":(sum>0?` - ${sum}x`:` + ${Math.abs(sum)}x`);
+    return make(a,t,s,`¿Cuáles son las soluciones de x²${mid} ${prod<0?"-":"+"} ${Math.abs(prod)} = 0?`,`x=${r1} y x=${r2}`,[`x=${-r1} y x=${-r2}`,`x=${Math.abs(prod)} y x=${Math.abs(sum)}`,`x=0 y x=${sum}`],"Busca dos números cuyo producto sea el término constante y cuya suma corresponda al coeficiente de x.",{level:"Reto máximo"});
+  });
+
+  hard("Matemáticas","Geometría y medición","Semejanza y área",(a,t,s)=>{
+    const k=pick([2,3,4]), area=pick([12,18,24,30]), ans=area*k*k;
+    return make(a,t,s,`Dos figuras semejantes tienen razón de lados ${k}:1. Si el área de la menor es ${area}, ¿cuál es el área de la mayor?`,ans,[area*k,area+k*k,area*(k+1)],`Las áreas cambian con el cuadrado de la razón de semejanza: ${area}×${k}²=${ans}.`,{level:"Reto máximo"});
+  });
+
+  hard("Matemáticas","Estadística y probabilidad","Probabilidad de eventos",(a,t,s)=>{
+    const total=40, A=22, B=18, both=10, union=A+B-both, neither=total-union;
+    return make(a,t,s,"En un grupo de 40 alumnos, 22 practican fútbol, 18 básquetbol y 10 practican ambos. ¿Cuál es la probabilidad de elegir al azar a un alumno que no practique ninguno de los dos deportes?",`${neither}/${total}`,[`${10}/${total}`,`${union}/${total}`,`${A+B}/${total}`],"Primero usa inclusión-exclusión: 22+18−10=30 practican al menos uno; 40−30=10 no practican ninguno.",{level:"Reto máximo"});
+  });
+
+  hard("Matemáticas","Estadística y probabilidad","Promedios y datos",(a,t,s)=>{
+    const vals=[78,84,91,87], target=86, needed=target*5-vals.reduce((p,v)=>p+v,0);
+    return make(a,t,s,`Las primeras cuatro calificaciones son ${vals.join(", ")}. ¿Qué calificación necesita en la quinta para terminar con promedio ${target}?`,needed,[needed-2,needed+2,target],"Multiplica el promedio deseado por 5 para obtener el total necesario y resta la suma de las cuatro calificaciones conocidas.",{level:"Reto máximo"});
+  });
+
+  window.generatePienseChallengePool = function(target=300){
+    const out=[];
+    if(!HARD.length) return out;
+    let guard=0;
+    while(out.length<target && guard<target*6){
+      guard++;
+      const fn=HARD[rand(0,HARD.length-1)];
+      try{
+        const item=fn();
+        if(item && item.options && item.options.length===4 && item.answer>=0) out.push(item);
+      }catch(e){ console.warn("PIENSE challenge generator skipped a family",e); }
+    }
+    return shuffle(out);
+  };
+
   window.PIENSE_TAXONOMY = {
     "Habilidad cognoscitiva":["Transformaciones lógicas","Relaciones","Patrones","Consideraciones lógicas","Razonamiento práctico"],
     "Español":["Lengua","Comprensión y análisis de lectura","Destrezas de redacción"],
