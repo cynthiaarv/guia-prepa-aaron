@@ -531,6 +531,7 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
     if(!sec) return finish();
     if(s.i<sec.end) recordTimedOutQuestions(s.i,sec.end);
     if(s.sectionIndex>=cfg.sectionPlan.length-1) return finish();
+    s.waitingForSectionEnd=false;
     s.sectionIndex++;
     const nextSec=currentSection();
     s.i=nextSec.start;
@@ -590,6 +591,21 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
   function next(){
     const sec=currentSection();
     if(sec && s.i===sec.end-1){
+      const elapsedSec=(Date.now()-s.sectionStarted)/1000;
+      const remaining=Math.max(0,sec.seconds-elapsedSec);
+      if(remaining>0){
+        s.waitingForSectionEnd=true;
+        $("#examMeta").textContent=sec.name+" · sección terminada";
+        $("#examTopic").textContent="Espera al cierre de la sección";
+        $("#question").textContent="Terminaste antes de tiempo. En la estructura de PIENSE II no puedes usar estos minutos en otra sección.";
+        $("#stimulus").classList.remove("hidden");
+        $("#stimulus").textContent="Si esto fuera la prueba en papel, podrías revisar únicamente los reactivos de esta misma sección. La siguiente parte se habilitará cuando termine el cronómetro.";
+        $("#answers").innerHTML="";
+        $("#feedback").className="feedback hidden";
+        $("#submitAnswer").classList.add("hidden");
+        $("#nextQuestion").classList.add("hidden");
+        return;
+      }
       advanceOfficialSection();
       return;
     }
