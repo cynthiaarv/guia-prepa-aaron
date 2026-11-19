@@ -12,13 +12,14 @@
 </head>
 <body>
 <div class="wrap">
-<div id="loginView" class="login card"><h1>Guía Práctica Admisión Prepa Tec Aaron Romo</h1><p class="muted">Cambridge English + PIENSE II en un solo lugar. <span class="pill">Versión 2.2</span></p><label><strong>Código de acceso</strong></label><input id="code" autocomplete="off" placeholder="Escribe tu código"><div class="row" style="margin-top:12px"><button id="loginBtn">Entrar</button></div><p id="loginMsg" class="muted"></p></div>
+<div id="loginView" class="login card"><h1>Guía Práctica Admisión Prepa Tec Aaron Romo</h1><p class="muted">Cambridge English + PIENSE II en un solo lugar. <span class="pill">Versión 2.3</span></p><label><strong>Código de acceso</strong></label><input id="code" autocomplete="off" placeholder="Escribe tu código"><div class="row" style="margin-top:12px"><button id="loginBtn">Entrar</button></div><p id="loginMsg" class="muted"></p></div>
 <div id="app" class="hidden">
 <div class="top"><div><div class="brand">Guía Práctica Admisión Prepa Tec Aaron Romo</div><div id="todayLabel" class="muted"></div></div><div class="row"><span id="priorityPill" class="pill"></span><button class="secondary noprint" id="logoutBtn">Salir</button></div></div>
 <div id="studentDashboard"><div id="dashboard" class="grid">
 <section class="card span12">
       <h2 id="todayTitle">Recomendación de hoy</h2>
       <p id="todayPlan"></p>
+      <div id="milestoneAlert" class="note hidden" style="margin:12px 0"></div>
       <div class="note" style="margin:12px 0">
       <strong>¿Qué debes usar?</strong><br>
       <strong>Práctica guiada:</strong> úsala para aprender y reforzar. Después de cada respuesta te explica qué estuvo bien o mal y por qué.<br><br>
@@ -179,6 +180,75 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
   function show(id){ ["dashboard","setupView","examView","resultView","historyView"].forEach(x=>$("#"+x)?.classList.add("hidden")); $("#"+id)?.classList.remove("hidden"); }
   function todayISO(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
 
+  function isCompleteAttempt(x){
+    if(x?.completed===false) return false;
+    if((x?.mode||"").toLowerCase().includes("examen")) return true;
+    const answered=(x?.details||[]).length;
+    return !x?.total || answered>=x.total;
+  }
+  function cloudAnswered(x){ return Array.isArray(x?.raw?.details) ? x.raw.details.length : Number(x?.total||0); }
+  function cloudComplete(x){
+    if(x?.raw?.completed===false) return false;
+    if((x?.mode||"").toLowerCase().includes("examen")) return true;
+    return cloudAnswered(x)>=Number(x?.total||0);
+  }
+  function dedupeQuestions(arr){
+    const seen=new Set();
+    return arr.filter(q=>{
+      const key=[q.area,q.topic,q.subtopic,q.q,q.stimulus||"",q.audio||""].join("¦");
+      if(seen.has(key)) return false;
+      seen.add(key); return true;
+    });
+  }
+  function examDueInfo(){
+    const h=history().filter(isCompleteAttempt);
+    let practices=0;
+    for(const x of h){
+      if(!(x.label||"").includes("PIENSE II")) continue;
+      if((x.label||"").includes("Examen prueba")) break;
+      if((x.label||"").includes("Práctica guiada")) practices++;
+    }
+    return {due:practices>=3,practices};
+  }
+  function startDateForCloud(x){
+    if(x?.raw?.started_at) return {date:new Date(x.raw.started_at),approx:false};
+    const end=new Date(x.created_at);
+    return {date:new Date(end.getTime()-Number(x.seconds||0)*1000),approx:true};
+  }
+  function strategyTip(q){
+    const s=(q.subtopic||"").toLowerCase(), t=(q.topic||"").toLowerCase(), a=(q.area||"").toLowerCase();
+    if(s.includes("idea central")) return "Busca la opción que abarque TODO el texto. Descarta las que solo repitan un ejemplo, dato o detalle secundario.";
+    if(s.includes("infer") || s.includes("implícita")) return "Haz una inferencia solo si puedes señalar una pista del texto que la sostenga. Descarta opciones que agreguen información nueva o exageren lo dicho.";
+    if(s.includes("título")) return "Un buen título resume tema + enfoque. Descarta títulos demasiado específicos, que solo cubran un detalle, o demasiado generales.";
+    if(s.includes("recursos literarios") || s.includes("figurative")) return "Atajo: «como» suele señalar símil; comparación directa sin «como», metáfora; acción humana dada a objetos/naturaleza, personificación; exageración imposible, hipérbole.";
+    if(s.includes("tipología") || s.includes("types of writing")) return "Identifica la intención: narrativo cuenta hechos; informativo explica; argumentativo defiende una postura con razones; dramático está pensado para representación.";
+    if(s.includes("secuencia")) return "Busca qué paso necesita ocurrir antes que otro. Elimina cualquier opción que ponga una consecuencia antes de su requisito.";
+    if(s.includes("precisión") || s.includes("concision") || s.includes("concisión")) return "Prefiere la opción más específica y corta que conserve todo el significado. Elimina redundancias como «subir arriba» y verbos vagos como «hacer» cuando exista uno preciso.";
+    if(s.includes("puntuación")) return "Lee la oración en bloques. Un conector introductorio suele separarse con coma y los dos puntos pueden anunciar una lista después de una idea completa.";
+    if(s.includes("juntas") || s.includes("separadas")) return "Prueba el significado: «porque» explica una causa; «por qué» pregunta directa o indirectamente; «demás» = otros; «de más» = sobrante.";
+    if(s.includes("acentuación")) return "Primero identifica qué función cumple la palabra. En pares como tú/tu, él/el, sé/se, la tilde cambia la función; después aplica la regla de agudas, graves o esdrújulas.";
+    if(s.includes("sufijos") || s.includes("prefijos")) return "Parte la palabra: prefijo + raíz + sufijo. Pregunta qué significado añade cada pieza antes de mirar las opciones.";
+    if(s.includes("analog")) return "Convierte la primera pareja en una frase («X sirve para Y», «X es parte de Y») y prueba exactamente la misma relación en las opciones.";
+    if(s.includes("transformaciones")) return "Escribe las restricciones una por una y elimina cualquier opción en cuanto viole una sola. No intentes resolver todo mentalmente de golpe.";
+    if(s.includes("patrones") || s.includes("secuencias complejas")) return "Prueba primero diferencias, luego multiplicaciones y después patrones alternados. Si hay dos series intercaladas, separa posiciones pares e impares.";
+    if(s.includes("matrices")) return "Busca la regla por filas y por columnas. Prueba suma/resta, diferencia o repetición antes de elegir una opción.";
+    if(s.includes("condicional")) return "No inviertas la condición: «si A, entonces B» no significa automáticamente «si B, entonces A». Usa solo conclusiones obligatorias.";
+    if(s.includes("razonamiento práctico")) return "Elige la opción que resuelva exactamente el problema descrito con la menor cantidad de supuestos extra.";
+    if(s.includes("ecuaciones") || s.includes("inecuaciones")) return "Aísla la variable haciendo la misma operación en ambos lados. En inecuaciones, recuerda invertir el signo solo al multiplicar o dividir entre un número negativo.";
+    if(s.includes("factorización")) return "Orden rápido: 1) busca factor común; 2) revisa diferencia de cuadrados; 3) después prueba otros patrones. Verifica multiplicando de regreso.";
+    if(s.includes("potencias") || s.includes("exponentes")) return "Con la misma base: al multiplicar sumas exponentes; al dividir, restas. No multipliques los exponentes salvo que sea una potencia elevada a otra potencia.";
+    if(s.includes("probabilidad")) return "Escribe primero: casos favorables / casos posibles. Antes de calcular, verifica que la respuesta quede entre 0 y 1.";
+    if(s.includes("pitágoras")) return "Úsalo solo en triángulos rectángulos: hipotenusa² = cateto² + cateto². La hipotenusa siempre debe ser el lado más largo.";
+    if(s.includes("funciones")) return "Sustituye el valor dado con paréntesis y resuelve paso a paso. Así evitas errores de signo.";
+    if(a.includes("inglés") || a.includes("english")){
+      if(s.includes("inference")) return "Choose only what the text supports. Eliminate answers that are possible in real life but not supported by the passage.";
+      if(s.includes("details")) return "Go back to the exact sentence in the passage; the correct answer should match the text without adding information.";
+      if(s.includes("purpose")) return "Ask: why did the author write this—inform, persuade, narrate, or explain? Choose the option that describes the whole passage.";
+      if(t.includes("uso del lenguaje") || t.includes("language")) return "Identify the subject and time first; then check the auxiliary/verb form. Eliminate options with subject–verb disagreement.";
+    }
+    return "Antes de elegir, elimina al menos una opción: busca contradicciones con la regla, datos que el texto no afirma o resultados imposibles. Después compara las dos opciones restantes.";
+  }
+
   function escICS(text){ return String(text||"").replace(/\\/g,"\\\\").replace(/\n/g,"\\n").replace(/,/g,"\\,").replace(/;/g,"\\;"); }
   function downloadICS(kind){
     const common="Llevar: pasaporte, lápiz, borrador, pluma, sacapuntas y el código/correo que está en el celular.";
@@ -203,7 +273,12 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
     let title, body, action;
     let priority;
     title="Recomendación de hoy";
-    if(beforeEnglish && day!==6 && day!==0){
+    const due=examDueInfo();
+    if(due.due){
+      priority="Siguiente reto: Examen prueba";
+      body=`Ya completaste ${due.practices} prácticas guiadas desde tu último examen prueba. Ahora toca medirte sin explicaciones para comprobar qué tanto dominas realmente y qué áreas necesitan refuerzo.`;
+      action="piense-sim";
+    } else if(beforeEnglish && day!==6 && day!==0){
       priority="Prioridad: Cambridge English";
       body="Hoy entra por el botón azul “Empezar práctica recomendada”. Harás una práctica guiada de Cambridge English y recibirás explicación después de cada respuesta.";
       action="english-practice";
@@ -239,11 +314,17 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
       $("#nextExamCountdown").textContent=upcoming[0]===0 ? `${upcoming[1]}: hoy` : upcoming[0]===1 ? `${upcoming[1]}: mañana` : `${upcoming[1]}: faltan ${upcoming[0]} días`;
     }
     $("#quickStart").dataset.action=action;
+    $("#quickStart").textContent=due.due?"Hacer examen prueba ahora":"Empezar práctica recomendada";
+    const milestone=$("#milestoneAlert");
+    if(milestone){
+      milestone.classList.toggle("hidden",!due.due);
+      if(due.due) milestone.innerHTML=`<strong>🚀 ¡Ya llevas ${due.practices} prácticas guiadas!</strong><br>Ya no necesitas otra práctica seguida: tu siguiente actividad debe ser un <strong>Examen prueba PIENSE</strong>. Ahí no verás pistas ni explicaciones durante el intento.`;
+    }
   }
 
   function buildReport(){
-    const h=history(), box=$("#reportBody");
-    if(!h.length){box.innerHTML='<p class="muted">Todavía no hay intentos.</p>'; return}
+    const h=history().filter(isCompleteAttempt), box=$("#reportBody");
+    if(!h.length){box.innerHTML='<p class="muted">Todavía no hay intentos completos.</p>'; return}
     const all = h.flatMap(x=>x.details||[]);
     const groups={};
     all.forEach(r=>{
@@ -312,7 +393,7 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
 
   function chooseQuestions(){
     const subjectName=cfg.subject==="english"?"Cambridge English":"PIENSE II";
-    const relevantAttempts=history().filter(x=>(x.label||"").includes(subjectName));
+    const relevantAttempts=history().filter(x=>isCompleteAttempt(x) && (x.label||"").includes(subjectName));
     const recentPrompts=new Set(relevantAttempts.slice(0,3).flatMap(x=>(x.details||[]).map(d=>d.question)));
     const h=relevantAttempts.flatMap(x=>x.details||[]);
     const g={};
@@ -364,6 +445,7 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
     // PIENSE: genera un banco fresco en cada intento.
     let arr=window.generatePiensePool ? window.generatePiensePool(cfg.mode==="simulation"?1100:700) : [...bank.piense];
     if(!arr.length) arr=[...bank.piense];
+    arr=dedupeQuestions(arr);
 
     if(cfg.mode==="practice"){
       const focus=$("#focusSel")?.value||"all";
@@ -437,12 +519,12 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
 
   function answer(){
     if(s.current===null){ $("#feedback").className="feedback bad"; $("#feedback").textContent="Selecciona una respuesta."; return }
-    const q=s.questions[s.i], ok=s.current===q.answer;
-    s.answers.push({id:q.id,area:q.area,topic:q.topic,subtopic:q.subtopic,level:q.level||"",correct:ok,chosen:s.current,answer:q.answer,question:q.q,explanation:q.explanation});
+    const q=s.questions[s.i], ok=s.current===q.answer, tip=strategyTip(q);
+    s.answers.push({id:q.id,area:q.area,topic:q.topic,subtopic:q.subtopic,level:q.level||"",correct:ok,chosen:s.current,answer:q.answer,question:q.q,explanation:q.explanation,strategy:tip});
     $("#submitAnswer").classList.add("hidden"); $("#nextQuestion").classList.remove("hidden");
     if(cfg.mode==="practice"){
       $("#feedback").className="feedback "+(ok?"good":"bad");
-      $("#feedback").innerHTML=`<strong>${ok?"✓ Correcto":"✕ Incorrecto"}</strong><div style="margin-top:6px">${q.explanation}</div>${!ok?`<div style="margin-top:6px"><strong>Respuesta correcta:</strong> ${q.options[q.answer]}</div>`:""}`;
+      $("#feedback").innerHTML=`<strong>${ok?"✓ Correcto":"✕ Incorrecto"}</strong><div style="margin-top:6px">${q.explanation}</div>${!ok?`<div style="margin-top:6px"><strong>Respuesta correcta:</strong> ${q.options[q.answer]}</div>`:""}<div class="note" style="margin-top:10px"><strong>💡 Tip para resolver este tipo de reactivo</strong><div style="margin-top:4px">${tip}</div></div>`;
     } else {
       $("#feedback").className="feedback";
       $("#feedback").textContent="Respuesta registrada.";
@@ -455,7 +537,11 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
 
   function showCoachPopup(rec,prev,weakest){
     let title="" , msg="";
-    if(prev){
+    const due=examDueInfo();
+    if(rec.mode==="Práctica guiada" && due.due){
+      title="🚀 Ya completaste 3+ prácticas";
+      msg=`Llevas ${due.practices} prácticas guiadas desde tu último Examen prueba. Tu siguiente actividad debe ser un Examen prueba PIENSE para medirte sin ayuda.`;
+    } else if(prev){
       const delta=rec.score-prev.score;
       const faster=prev.seconds && rec.seconds < prev.seconds*.9 && rec.score>=prev.score;
       if(delta>=5){ title=`🎉 ¡Mejoraste ${delta} puntos!`; msg=`Pasaste de ${prev.score}% a ${rec.score}%. Mantén lo que funcionó y ahora enfócate en ${weakest?.k||"tu siguiente área"}.`; }
@@ -469,12 +555,16 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
 
   function finish(){
     clearInterval(s.timer);
-    const elapsed=Math.round((Date.now()-s.started)/1000), c=s.answers.filter(x=>x.correct).length, sc=pct(c,s.questions.length);
-    const rec={date:new Date().toISOString(),label:`${cfg.subject==="english"?"Cambridge English":"PIENSE II"} · ${cfg.mode==="practice"?"Práctica guiada":"Examen prueba"}`,score:sc,correct:c,total:s.questions.length,seconds:elapsed,details:s.answers};
+    const elapsed=Math.round((Date.now()-s.started)/1000), answered=s.answers.length, c=s.answers.filter(x=>x.correct).length;
+    const completed=cfg.mode==="simulation" || answered===s.questions.length;
+    const denominator=cfg.mode==="simulation" ? s.questions.length : Math.max(answered,1);
+    const sc=pct(c,denominator);
+    const rec={date:new Date().toISOString(),started_at:new Date(s.started).toISOString(),completed,label:`${cfg.subject==="english"?"Cambridge English":"PIENSE II"} · ${cfg.mode==="practice"?"Práctica guiada":"Examen prueba"}`,score:sc,correct:c,total:s.questions.length,seconds:elapsed,details:s.answers};
     const prev=history().find(x=>x.label===rec.label);
     saveHistory(rec);
     show("resultView");
-    $("#score").textContent=sc+"%"; $("#scoreText").textContent=`${c} correctas de ${s.questions.length}`;
+    $("#score").textContent=completed?sc+"%":"Incompleto";
+    $("#scoreText").textContent=completed?`${c} correctas de ${s.questions.length}`:`${c} correctas de ${answered} contestadas · práctica no contabilizada en tu progreso`;
     $("#timeKpi").textContent=fmt(elapsed);
     const groups={}; s.answers.forEach(r=>{const k=`${r.topic} › ${r.subtopic}`;groups[k]||={n:0,c:0};groups[k].n++;if(r.correct)groups[k].c++});
     const rows=Object.entries(groups).map(([k,v])=>({k,p:pct(v.c,v.n),n:v.n})).sort((a,b)=>a.p-b.p);
@@ -521,7 +611,7 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
   function historyView(){
     show("historyView");
     const h=history();
-    $("#historyBody").innerHTML=h.length?h.map(x=>`<div class="module" style="margin:8px 0"><strong>${new Date(x.date).toLocaleString()} · ${x.score}%</strong><div class="muted">${x.label} · ${x.correct}/${x.total} · ${fmt(x.seconds)}</div></div>`).join(""):'<p class="muted">Todavía no hay intentos.</p>';
+    $("#historyBody").innerHTML=h.length?h.map(x=>{const complete=isCompleteAttempt(x),answered=(x.details||[]).length;return `<div class="module" style="margin:8px 0"><strong>${new Date(x.date).toLocaleString()} · ${complete?x.score+"%":"⚠️ Incompleto"}</strong><div class="muted">${x.label} · ${complete?x.correct+"/"+x.total:x.correct+"/"+answered+" correctas de lo contestado"} · Duración ${fmt(x.seconds)}</div></div>`}).join(""):'<p class="muted">Todavía no hay intentos.</p>';
   }
 
 
@@ -552,7 +642,7 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
     $("#parentPreviewAnswer").onclick=()=>{
       if(parentPreview.chosen===null){const f=$("#parentPreviewFeedback");f.className="feedback bad";f.textContent="Selecciona una opción para probar cómo se vería.";return}
       const ok=parentPreview.chosen===q.answer, f=$("#parentPreviewFeedback"); f.className="feedback "+(ok?"good":"bad");
-      if(parentPreview.mode==="practice") f.innerHTML=`<strong>${ok?"✓ Correcto":"✕ Incorrecto"}</strong><div style="margin-top:6px">${q.explanation}</div>${!ok?`<div style="margin-top:6px"><strong>Respuesta correcta:</strong> ${q.options[q.answer]}</div>`:""}`;
+      if(parentPreview.mode==="practice") f.innerHTML=`<strong>${ok?"✓ Correcto":"✕ Incorrecto"}</strong><div style="margin-top:6px">${q.explanation}</div>${!ok?`<div style="margin-top:6px"><strong>Respuesta correcta:</strong> ${q.options[q.answer]}</div>`:""}<div class="note" style="margin-top:10px"><strong>💡 Tip que verá Aarón</strong><div style="margin-top:4px">${strategyTip(q)}</div></div>`;
       else f.innerHTML=`<strong>Vista exclusiva para mamá</strong><div style="margin-top:6px">Durante el Examen prueba Aarón solo ve “Respuesta registrada”. La explicación que recibiría al final es: ${q.explanation}</div><div style="margin-top:6px"><strong>Correcta:</strong> ${q.options[q.answer]}</div>`;
     };
     if(q.audio) $("#parentPlayAudio").onclick=()=>{if("speechSynthesis" in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(q.audio);u.lang="en-US";u.rate=.9;speechSynthesis.speak(u)}else alert(q.audio)};
@@ -573,12 +663,21 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
 
   function renderCloudParent(attempts){
     const a=attempts||[];
-    parentCloudAttempts = a;
-    $("#momLastScore").textContent=a.length ? a[0].score+"%" : "—";
-    const allBreakdowns={};
-    const weak=[];
-    const tutor=[];
-    a.forEach(x=>{
+    parentCloudAttempts=a;
+    const complete=a.filter(cloudComplete);
+    const practices=complete.filter(x=>(x.mode||"").toLowerCase().includes("práctica"));
+    const exams=complete.filter(x=>(x.mode||"").toLowerCase().includes("examen"));
+    const latest=complete[0]||a[0];
+    $("#momLastScore").textContent=latest ? latest.score+"%" : "—";
+
+    let practicesSinceExam=0;
+    for(const x of complete){
+      if((x.mode||"").toLowerCase().includes("examen")) break;
+      if((x.mode||"").toLowerCase().includes("práctica")) practicesSinceExam++;
+    }
+
+    const allBreakdowns={}, weak=[], tutor=[], coverage={};
+    complete.forEach(x=>{
       Object.entries(x.breakdown||{}).forEach(([k,v])=>{
         const p=Number(v?.percent??0), n=Number(v?.count??0);
         if(!allBreakdowns[k]) allBreakdowns[k]={weighted:0,n:0};
@@ -587,17 +686,29 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
       });
       (x.weak_areas||[]).forEach(w=>weak.push(typeof w==="string"?{label:w}:w));
       (x.tutor_questions||[]).forEach(q=>tutor.push(typeof q==="string"?{question:q}:q));
+      (x.raw?.details||[]).forEach(d=>{
+        const area=d.area||"Sin área";
+        coverage[area] ||= {n:0,c:0};
+        coverage[area].n++; if(d.correct) coverage[area].c++;
+      });
     });
-    const topicRows=Object.entries(allBreakdowns)
-      .map(([k,v])=>({k,p:Math.round(v.weighted/v.n),n:v.n}))
-      .sort((x,y)=>x.p-y.p);
+    const topicRows=Object.entries(allBreakdowns).map(([k,v])=>({k,p:Math.round(v.weighted/v.n),n:v.n})).sort((x,y)=>x.p-y.p);
+    const avg=complete.length?Math.round(complete.slice(0,10).reduce((s,x)=>s+Number(x.score||0),0)/Math.min(complete.length,10)):0;
+    const areas=["Habilidad cognoscitiva","Español","Matemáticas","Inglés PIENSE"];
+    const coverageHtml=areas.map(area=>{
+      const v=coverage[area]||{n:0,c:0}, p=v.n?Math.round(v.c*100/v.n):null;
+      return `<div class="module span6"><strong>${area}</strong><div class="kpi" style="font-size:22px">${v.n? p+"%":"Sin medir"}</div><div class="muted">${v.n} reactivos registrados</div></div>`;
+    }).join("");
 
     $("#reportBodyParent").innerHTML = a.length ? `
+      ${practicesSinceExam>=3? `<div class="note" style="margin-bottom:12px"><strong>🚀 Ya le toca Examen prueba.</strong><br>Aarón lleva ${practicesSinceExam} prácticas completas desde el último examen prueba y todavía no tenemos una medición sin ayudas. El siguiente paso debería ser <strong>Examen prueba PIENSE</strong>.</div>`:""}
       <div class="grid" style="margin-top:8px">
-        <div class="module span4"><strong>Intentos en la nube</strong><span class="kpi">${a.length}</span></div>
-        <div class="module span4"><strong>Promedio últimos 10</strong><span class="kpi">${Math.round(a.slice(0,10).reduce((s,x)=>s+x.score,0)/Math.min(a.length,10))}%</span></div>
-        <div class="module span4"><strong>Último intento</strong><span class="kpi">${a[0].score}%</span></div>
+        <div class="module span4"><strong>Prácticas completas</strong><span class="kpi">${practices.length}</span></div>
+        <div class="module span4"><strong>Exámenes prueba</strong><span class="kpi">${exams.length}</span></div>
+        <div class="module span4"><strong>Promedio válido</strong><span class="kpi">${complete.length?avg+"%":"—"}</span><span class="muted">excluye prácticas incompletas</span></div>
       </div>
+      <h3 style="margin-top:18px">Cobertura real por área</h3>
+      <div class="grid">${coverageHtml}</div>
       <h3 style="margin-top:18px">Desglose por tema y subtema</h3>
       ${topicRows.length ? topicRows.map(r=>`<div class="barrow"><div><strong>${r.k}</strong><div class="muted">${r.n} reactivo${r.n===1?"":"s"}</div></div><div><strong>${r.p}%</strong><div class="smallbar"><span style="width:${r.p}%"></span></div></div></div>`).join("") : '<p class="muted">Los siguientes intentos irán llenando este desglose.</p>'}
       <h3 style="margin-top:18px">Áreas prioritarias</h3>
@@ -606,11 +717,18 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
       ${tutor.length ? [...new Map(tutor.map(q=>[(q.question||JSON.stringify(q)),q])).values()].slice(0,12).map((q,i)=>`<div class="module" style="margin:7px 0"><strong>${i+1}. ${(q.topic||"")} ${(q.subtopic? "› "+q.subtopic:"")}</strong><div>${q.question||""}</div>${q.explanation?`<div class="muted" style="margin-top:4px">${q.explanation}</div>`:""}</div>`).join("") : '<p class="muted">Sin dudas registradas todavía.</p>'}
     ` : '<p class="muted">Todavía no hay intentos guardados en la nube.</p>';
 
-    $("#parentAttempts").innerHTML = a.length ? a.slice(0,50).map(x=>`
-      <div class="module" style="margin:8px 0">
-        <strong>${new Date(x.created_at).toLocaleString()} · ${x.score}%</strong>
-        <div class="muted">${x.label} · ${x.mode} · ${x.correct}/${x.total} · ${fmt(x.seconds)}</div>
-      </div>`).join("") : '<p class="muted">Todavía no hay intentos.</p>';
+    $("#parentAttempts").innerHTML = a.length ? a.slice(0,50).map(x=>{
+      const answered=cloudAnswered(x), completeFlag=cloudComplete(x), sd=startDateForCloud(x), end=new Date(x.created_at);
+      const denom=completeFlag?Number(x.total||0):Math.max(answered,1);
+      const scoreShown=completeFlag ? x.score+"%" : Math.round(Number(x.correct||0)*100/denom)+"% de lo contestado";
+      const rhythm=answered?Math.round(Number(x.seconds||0)/answered):0;
+      return `<div class="module" style="margin:8px 0">
+        <strong>${completeFlag?scoreShown:"⚠️ Intento incompleto · "+scoreShown}</strong>
+        <div>${x.label} · ${x.mode}</div>
+        <div class="muted" style="margin-top:4px"><strong>${sd.approx?"Inicio aprox.":"Inicio"}:</strong> ${sd.date.toLocaleString("es-MX",{dateStyle:"medium",timeStyle:"short"})} · <strong>Fin:</strong> ${end.toLocaleTimeString("es-MX",{hour:"numeric",minute:"2-digit"})}</div>
+        <div class="muted"><strong>Duración:</strong> ${fmt(x.seconds)} · <strong>Ritmo:</strong> ${rhythm}s/reactivo · <strong>Respondidos:</strong> ${answered}/${x.total}</div>
+      </div>`;
+    }).join("") : '<p class="muted">Todavía no hay intentos.</p>';
   }
 
   async function tryParentLogin(accessCode){
@@ -638,20 +756,27 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
   function downloadParentReport(){
     const a=parentCloudAttempts||[];
     if(!a.length){alert("Aún no hay intentos sincronizados.");return}
+    const complete=a.filter(cloudComplete);
     const agg={};
-    a.forEach(x=>Object.entries(x.breakdown||{}).forEach(([k,v])=>{
+    complete.forEach(x=>Object.entries(x.breakdown||{}).forEach(([k,v])=>{
       const p=Number(v?.percent??0), n=Math.max(Number(v?.count??0),1);
       agg[k] ||= {weighted:0,n:0};
       agg[k].weighted += p*n; agg[k].n += n;
     }));
     const rows=Object.entries(agg).map(([k,v])=>({k,p:Math.round(v.weighted/v.n),n:v.n})).sort((x,y)=>x.p-y.p);
-    let txt=`REPORTE DE PREPARACIÓN - AARÓN ROMO\nFecha: ${new Date().toLocaleString()}\n\nÁREAS PRIORITARIAS\n`;
+    const practices=complete.filter(x=>(x.mode||"").toLowerCase().includes("práctica")).length;
+    const exams=complete.filter(x=>(x.mode||"").toLowerCase().includes("examen")).length;
+    let txt=`REPORTE DE PREPARACIÓN - AARÓN ROMO\nGenerado: ${new Date().toLocaleString()}\nPrácticas completas: ${practices}\nExámenes prueba: ${exams}\n\nÁREAS PRIORITARIAS\n`;
     rows.slice(0,15).forEach(r=>txt+=`- ${r.k}: ${r.p}% (${r.n} reactivos)\n`);
-    txt+=`\nÚLTIMOS INTENTOS\n`;
-    a.slice(0,20).forEach(x=>txt+=`- ${new Date(x.created_at).toLocaleString()}: ${x.label} — ${x.score}% (${x.correct}/${x.total}) — ${fmt(x.seconds)}\n`);
+    txt+="\nÚLTIMOS INTENTOS\n";
+    a.slice(0,20).forEach(x=>{
+      const answered=cloudAnswered(x), completeFlag=cloudComplete(x), sd=startDateForCloud(x), end=new Date(x.created_at);
+      const status=completeFlag?`${x.score}% (${x.correct}/${x.total})`:`INCOMPLETO: ${x.correct}/${answered} correctas de lo contestado`;
+      txt+=`- ${x.label} — ${status}\n  Inicio${sd.approx?" aprox.":""}: ${sd.date.toLocaleString()} | Fin: ${end.toLocaleString()} | Duración: ${fmt(x.seconds)} | Respondidos: ${answered}/${x.total}\n`;
+    });
     const qs=[];
-    a.slice(0,8).forEach(x=>(x.tutor_questions||[]).forEach(q=>qs.push(typeof q==="string"?q:(q.question||""))));
-    if(qs.length){txt+=`\nDUDAS PARA ASESORÍA\n`;[...new Set(qs)].slice(0,15).forEach((q,i)=>txt+=`${i+1}. ${q}\n`);}
+    complete.slice(0,8).forEach(x=>(x.tutor_questions||[]).forEach(q=>qs.push(typeof q==="string"?q:(q.question||""))));
+    if(qs.length){txt+="\nDUDAS PARA ASESORÍA\n";[...new Set(qs)].slice(0,15).forEach((q,i)=>txt+=`${i+1}. ${q}\n`);}
     const blob=new Blob([txt],{type:"text/plain;charset=utf-8"}), link=document.createElement("a");
     link.href=URL.createObjectURL(blob);link.download="reporte_aaron_cloud.txt";link.click();URL.revokeObjectURL(link.href);
   }
