@@ -366,7 +366,7 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
     const isEng=subject==="english";
     $("#setupTitle").textContent = isEng ? (mode==="practice"?"Cambridge English · práctica guiada":"Cambridge English · examen prueba") : (mode==="practice"?"PIENSE II · práctica guiada":"PIENSE II · examen prueba");
     $("#setupDesc").textContent = mode==="practice"
-      ? "Después de cada respuesta verás por qué está bien o mal. Los ejercicios PIENSE se regeneran y rotan por subtema para que practiques el concepto, no una respuesta memorizada."
+      ? "Después de cada respuesta verás por qué está bien o mal. Los ejercicios PIENSE se regeneran y rotan por subtema; además, conforme tu promedio reciente sube, la práctica incorpora una proporción mayor de reactivos de Reto máximo."
       : "Sin explicaciones ni ayuda durante el examen. El tiempo corre para medir precisión y ritmo. Al finalizar recibirás feedback completo por área, tema y subtema.";
     let html="";
     if(mode==="practice"){
@@ -449,9 +449,18 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
       return shuffle(arr);
     }
 
-    // PIENSE: genera un banco fresco en cada intento.
+    // PIENSE: genera un banco fresco en cada intento y eleva dificultad según desempeño.
     let arr=window.generatePiensePool ? window.generatePiensePool(cfg.mode==="simulation"?1100:700) : [...bank.piense];
     if(!arr.length) arr=[...bank.piense];
+    if(cfg.mode==="practice" && window.generatePienseChallengePool){
+      const recentScores=relevantAttempts.slice(0,3).map(x=>Number(x.score||0));
+      const recentAvg=recentScores.length ? recentScores.reduce((a,b)=>a+b,0)/recentScores.length : 0;
+      const hardShare=recentAvg>=85 ? .50 : recentAvg>=75 ? .25 : recentAvg>=65 ? .10 : 0;
+      if(hardShare>0){
+        const hard=window.generatePienseChallengePool(Math.max(80,Math.round(350*hardShare)));
+        arr=[...hard,...arr];
+      }
+    }
     arr=dedupeQuestions(arr);
 
     if(cfg.mode==="practice"){
