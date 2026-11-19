@@ -15,7 +15,7 @@
 </head>
 <body>
 <div class="wrap">
-<div id="loginView" class="login card"><h1>Guía Práctica Admisión Prepa Tec Aaron Romo</h1><p class="muted">Cambridge English + PIENSE II en un solo lugar. <span class="pill">Versión 2.3</span></p><label><strong>Código de acceso</strong></label><input id="code" autocomplete="off" placeholder="Escribe tu código"><div class="row" style="margin-top:12px"><button id="loginBtn">Entrar</button></div><p id="loginMsg" class="muted"></p></div>
+<div id="loginView" class="login card"><h1>Guía Práctica Admisión Prepa Tec Aaron Romo</h1><p class="muted">Cambridge English + PIENSE II en un solo lugar. <span class="pill">Versión 2.4</span></p><label><strong>Código de acceso</strong></label><input id="code" autocomplete="off" placeholder="Escribe tu código"><div class="row" style="margin-top:12px"><button id="loginBtn">Entrar</button></div><p id="loginMsg" class="muted"></p></div>
 <div id="app" class="hidden">
 <div class="top"><div><div class="brand">Guía Práctica Admisión Prepa Tec Aaron Romo</div><div id="todayLabel" class="muted"></div></div><div class="row"><span id="priorityPill" class="pill"></span><button class="secondary noprint" id="logoutBtn">Salir</button></div></div>
 <div id="studentDashboard"><div id="dashboard" class="grid">
@@ -389,10 +389,10 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
         ? `<div class="note"><strong>Examen prueba Cambridge:</strong> hasta 90 minutos, sin explicaciones durante la prueba. Mezcla 60 reactivos de Language Use, Vocabulary, Reading y Listening.</div>`
         : `<div class="note"><strong>Examen prueba PIENSE II:</strong> mezcla Habilidad cognoscitiva, Español, Matemáticas e Inglés PIENSE. Los reactivos se regeneran antes de cada intento.</div>
            <label><strong>Formato</strong><select id="simCountSel">
-             <option value="60" selected>Examen prueba · 60 reactivos</option>
-             <option value="154">Simulador completo · 154 reactivos (42 cognoscitiva, 37 español, 35 matemáticas, 40 inglés)</option>
+             <option value="154" selected>Simulador completo · estructura de la prueba de práctica (154 reactivos)</option>
+             <option value="60">Entrenamiento corto · 60 reactivos</option>
            </select></label>
-           <p class="muted">El simulador completo usa la distribución de reactivos indicada en la guía PIENSE II. El cronómetro de esta plataforma es de entrenamiento y no sustituye las instrucciones del aplicador.</p>`;
+           <div class="note"><strong>Simulador completo:</strong> 4 secciones con cronómetro independiente: Habilidad cognoscitiva 42 reactivos / 35 min; Español 37 / 30 min; Matemáticas 35 / 35 min; Inglés 40 / 30 min. Al terminar el tiempo de una sección, pasa a la siguiente y no permite usar el tiempo sobrante en otra parte.</div><p class="muted">Esta estructura sigue la Prueba de práctica PIENSE II proporcionada. La Guía de estudio menciona además un tiempo total de contestación de 2 h 35 min y cinco partes; por eso la plataforma identifica claramente que este modo replica la estructura de la prueba de práctica.</p>`;
     }
     $("#setupOptions").innerHTML=html;
   }
@@ -477,22 +477,35 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
       return shuffle(selected).slice(0,n);
     }
 
-    const count=parseInt($("#simCountSel")?.value||"60",10);
+    const count=parseInt($("#simCountSel")?.value||"154",10);
     cfg.simCount=count;
     const quotas=count===154
       ? {"Habilidad cognoscitiva":42,"Español":37,"Matemáticas":35,"Inglés PIENSE":40}
       : {"Habilidad cognoscitiva":16,"Español":14,"Matemáticas":14,"Inglés PIENSE":16};
     const out=[];
-    for(const [area,num] of Object.entries(quotas)){
+    const officialOrder=["Habilidad cognoscitiva","Español","Matemáticas","Inglés PIENSE"];
+    for(const area of officialOrder){
+      const num=quotas[area];
       const bucket=shuffle(arr.filter(q=>q.area===area));
       out.push(...bucket.slice(0,num));
     }
-    cfg.timeLimit=count===154 ? 155*60 : 70*60;
+    if(count===154){
+      cfg.sectionPlan=[
+        {name:"Parte 1 · Habilidad cognoscitiva",area:"Habilidad cognoscitiva",start:0,end:42,seconds:35*60},
+        {name:"Parte 2 · Español",area:"Español",start:42,end:79,seconds:30*60},
+        {name:"Parte 3 · Matemáticas",area:"Matemáticas",start:79,end:114,seconds:35*60},
+        {name:"Parte 4 · Inglés",area:"Inglés PIENSE",start:114,end:154,seconds:30*60}
+      ];
+      cfg.timeLimit=130*60;
+      return out;
+    }
+    cfg.sectionPlan=null;
+    cfg.timeLimit=70*60;
     return shuffle(out);
   }
 
   function start(){
-    s={questions:chooseQuestions(),i:0,answers:[],started:Date.now(),current:null,listens:0};
+    s={questions:chooseQuestions(),i:0,answers:[],started:Date.now(),current:null,listens:0,sectionIndex:0,sectionStarted:Date.now()};
     show("examView");
     renderQ();
     clearInterval(s.timer);
@@ -500,7 +513,42 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
     updateTime();
   }
 
+  function currentSection(){
+    return (cfg.mode==="simulation" && cfg.simCount===154 && Array.isArray(cfg.sectionPlan)) ? cfg.sectionPlan[s.sectionIndex] : null;
+  }
+
+  function recordTimedOutQuestions(from,to){
+    for(let j=from;j<to;j++){
+      const q=s.questions[j];
+      if(!q) continue;
+      const already=s.answers.some(a=>a.id===q.id);
+      if(!already) s.answers.push({id:q.id,area:q.area,topic:q.topic,subtopic:q.subtopic,level:q.level||"",correct:false,chosen:null,answer:q.answer,question:q.q,explanation:q.explanation,strategy:strategyTip(q),timed_out:true});
+    }
+  }
+
+  function advanceOfficialSection(){
+    const sec=currentSection();
+    if(!sec) return finish();
+    if(s.i<sec.end) recordTimedOutQuestions(s.i,sec.end);
+    if(s.sectionIndex>=cfg.sectionPlan.length-1) return finish();
+    s.sectionIndex++;
+    const nextSec=currentSection();
+    s.i=nextSec.start;
+    s.sectionStarted=Date.now();
+    s.current=null;
+    renderQ();
+    alert(`Inicia ${nextSec.name}. Tienes ${Math.round(nextSec.seconds/60)} minutos para esta sección.`);
+  }
+
   function updateTime(){
+    const sec=currentSection();
+    if(sec){
+      const elapsedSec=(Date.now()-s.sectionStarted)/1000;
+      const remaining=Math.max(0,sec.seconds-elapsedSec);
+      $("#timeDisplay").textContent=`${sec.name} · ${fmt(remaining)}`;
+      if(remaining<=0) advanceOfficialSection();
+      return;
+    }
     const elapsed=(Date.now()-s.started)/1000;
     const limit=cfg.mode==="simulation" ? (cfg.timeLimit || (cfg.subject==="english"?90*60:70*60)) : null;
     $("#timeDisplay").textContent = limit ? `Tiempo: ${fmt(limit-elapsed)}` : `Tiempo: ${fmt(elapsed)}`;
@@ -509,7 +557,9 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
 
   function renderQ(){
     const q=s.questions[s.i]; s.current=null; s.listens=0;
-    $("#examMeta").textContent=`${cfg.mode==="practice"?"Práctica guiada":"Examen prueba"} · Pregunta ${s.i+1} de ${s.questions.length} · ${q.area}`;
+    const sec=currentSection();
+    const sectionText=sec ? `${sec.name} · Reactivo ${s.i-sec.start+1} de ${sec.end-sec.start}` : `Pregunta ${s.i+1} de ${s.questions.length}`;
+    $("#examMeta").textContent=`${cfg.mode==="practice"?"Práctica guiada":"Examen prueba"} · ${sectionText} · ${q.area}`;
     $("#examTopic").textContent=`${q.topic} › ${q.subtopic}`;
     $("#progBar").style.width=`${(s.i/s.questions.length)*100}%`;
     $("#question").textContent=q.q;
@@ -538,6 +588,11 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
   }
 
   function next(){
+    const sec=currentSection();
+    if(sec && s.i===sec.end-1){
+      advanceOfficialSection();
+      return;
+    }
     if(s.i<s.questions.length-1){s.i++; renderQ()} else finish();
   }
 
@@ -565,7 +620,7 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
     const completed=cfg.mode==="simulation" || answered===s.questions.length;
     const denominator=cfg.mode==="simulation" ? s.questions.length : Math.max(answered,1);
     const sc=pct(c,denominator);
-    const rec={date:new Date().toISOString(),started_at:new Date(s.started).toISOString(),completed,label:`${cfg.subject==="english"?"Cambridge English":"PIENSE II"} · ${cfg.mode==="practice"?"Práctica guiada":"Examen prueba"}`,score:sc,correct:c,total:s.questions.length,seconds:elapsed,details:s.answers};
+    const rec={date:new Date().toISOString(),started_at:new Date(s.started).toISOString(),completed,section_mode:(cfg.simCount===154&&cfg.mode==="simulation")?"PIENSE practice-test structure":null,label:`${cfg.subject==="english"?"Cambridge English":"PIENSE II"} · ${cfg.mode==="practice"?"Práctica guiada":"Examen prueba"}`,score:sc,correct:c,total:s.questions.length,seconds:elapsed,details:s.answers};
     const prev=history().find(x=>x.label===rec.label);
     saveHistory(rec);
     show("resultView");
@@ -588,7 +643,7 @@ window.QUESTION_BANK = {"english": [{"id": "EN-GR-001", "area": "English", "topi
       : "Este intento sirve como diagnóstico. Enfócate primero en aprender los subtemas débiles con Práctica guiada y vuelve al Examen prueba después.";
     const modeMsg=cfg.mode==="practice"
       ? "Como fue una Práctica guiada, usa las explicaciones de tus errores para repetir los subtemas débiles."
-      : "Como fue un Examen prueba, no recibiste ayuda durante el intento. Usa este resultado para medir qué tan bien respondes bajo tiempo.";
+      : cfg.simCount===154 ? "Como fue el simulador completo, trabajaste 154 reactivos en cuatro secciones con tiempos independientes según la Prueba de práctica PIENSE II. No recibiste explicaciones durante el intento." : "Como fue un Examen prueba, no recibiste ayuda durante el intento. Usa este resultado para medir qué tan bien respondes bajo tiempo.";
     $("#performanceFeedback").innerHTML=`
       <div class="note"><strong>${levelMsg}</strong></div>
       <div class="grid" style="margin-top:10px">
